@@ -7,16 +7,20 @@ import (
 	"strings"
 )
 
+var (
+	// ErrUndefinedVariables is returned when template contains undefined variables
+	ErrUndefinedVariables = errors.New("undefined variables")
+
+	variableRe = regexp.MustCompile(`{(.+?)}`)
+)
+
 const undefinedKeyword = "undefined"
-
-var ErrUndefinedVariables = errors.New("undefined variables")
-
-var variableRe = regexp.MustCompile(`{(.+?)}`)
 
 func newErrorUndefinedVariables(variables []string) error {
 	return fmt.Errorf("%w: %s", ErrUndefinedVariables, strings.Join(variables, ", "))
 }
 
+// Render the template with the given variables
 func (t Template) Render(variables Variables) (string, error) {
 	undefinedVariables := make([]string, 0)
 	result := variableRe.ReplaceAllStringFunc(string(t), func(match string) string {

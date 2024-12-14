@@ -9,10 +9,12 @@ import (
 	"github.com/mishamyrt/ticketeer/internal/ticketeer/render"
 )
 
+// ApplyArgs represent arguments for apply command
 type ApplyArgs struct {
 	DryRunWith string
 }
 
+// Apply appends ticket id to commit message
 func Apply(opts *Options, args *ApplyArgs) error {
 	cfg, err := config.FromYAML(opts.ConfigPath)
 	if err != nil {

@@ -5,6 +5,7 @@ import (
 	"github.com/mishamyrt/ticketeer/internal/tpl"
 )
 
+// Title renders the title of the message
 func Title(
 	template tpl.Template,
 	title string,
@@ -16,6 +17,7 @@ func Title(
 	})
 }
 
+// Body renders the body of the message
 func Body(
 	template tpl.Template,
 	body string,

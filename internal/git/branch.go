@@ -17,8 +17,10 @@ const headPrefix = "ref: refs/heads/"
 
 var headPath = filepath.Join(".git", "HEAD")
 
+// BranchName represents git branch name
 type BranchName string
 
+// String returns string representation of branch name
 func (b BranchName) String() string {
 	return string(b)
 }

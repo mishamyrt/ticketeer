@@ -2,6 +2,7 @@ package cmd
 
 import "log"
 
+// Ticketeer is a command line utility to add ticket id to commit message
 func Ticketeer() int {
 	rootCmd := newRootCmd()
 

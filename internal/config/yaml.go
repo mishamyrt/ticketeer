@@ -1,22 +1,30 @@
 package config
 
 import (
+	"errors"
+	"fmt"
 	"os"
 
 	"github.com/mishamyrt/ticketeer/internal/tpl"
 	"gopkg.in/yaml.v3"
 )
 
+// ErrFileNotFound is returned when configuration file is not found
+var ErrFileNotFound = errors.New("config file not found")
+
+// YAMLMessageConfig represents message configuration
 type YAMLMessageConfig struct {
 	Location *string `yaml:"location"`
 	Format   *string `yaml:"format"`
 }
 
+// YAMLConfig represents yaml configuration
 type YAMLConfig struct {
 	AllowEmpty *bool             `yaml:"allow_empty"`
 	Message    YAMLMessageConfig `yaml:"message"`
 }
 
+// ParseYAML parses yaml configuration
 func ParseYAML(raw YAMLConfig) (config Config, err error) {
 	config = defaultConfig
 	if raw.AllowEmpty != nil {
@@ -37,11 +45,12 @@ func ParseYAML(raw YAMLConfig) (config Config, err error) {
 	return
 }
 
+// FromYAML reads and parses yaml configuration
 func FromYAML(path string) (Config, error) {
 	content, err := os.ReadFile(path)
 	if err != nil {
 		if os.IsNotExist(err) {
-			err = newErrFileNotFound(path)
+			err = fmt.Errorf("%w at %s", ErrFileNotFound, path)
 		}
 		return Config{}, err
 	}

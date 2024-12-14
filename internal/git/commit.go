@@ -50,7 +50,7 @@ func ParseCommitMessage(text string) (CommitMessage, error) {
 	}, nil
 }
 
-// GetCommitMessage reads and parses commit message from internal git file.
+// ReadCommitMessage reads and parses commit message from internal git file.
 func ReadCommitMessage() (CommitMessage, error) {
 	content, err := os.ReadFile(messagePath)
 	if err != nil {

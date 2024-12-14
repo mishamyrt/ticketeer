@@ -13,4 +13,5 @@ var defaultConfig = Config{
 	Template:       defaultTemplates[TicketLocationTitle],
 }
 
+// DefaultPath is the default path to the configuration file
 const DefaultPath = "./ticketeer.yaml"
