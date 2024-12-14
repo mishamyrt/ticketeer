@@ -5,6 +5,14 @@ GIT_CHGLOG_VERSION = v0.15.4
 GO_BIN_PATH := $(shell go env GOPATH)/bin
 TEST_MODULES := $(shell go list ./... | grep -v -e /cmd/)
 
+.PHONY: build
+build:
+	go build -o build/ticketeer .
+
+.PHONY: test
+test:
+	@go test $(TEST_MODULES)
+
 .PHONY: setup
 setup:
 	curl -sSfL \
@@ -24,10 +32,9 @@ lint:
 
 .PHONY: coverage
 coverage:
-	mkdir -p coverage
-	go test -coverprofile=coverage/cover.out $(TEST_MODULES)
-	go tool cover -html coverage/cover.out -o coverage/cover.html
-	open coverage/cover.html
+	@mkdir -p coverage
+	@go test -coverprofile=coverage/cover.out $(TEST_MODULES)
+	@go tool cover -html coverage/cover.out -o coverage/cover.html
 
 .PHONY: clean
 clean:
@@ -35,9 +42,9 @@ clean:
 
 .PHONY: check
 check:
-	make lint
-	make test
-	make build
+	@make lint
+	@make test
+	@make build
 
 .PHONY: changelog
 changelog:
