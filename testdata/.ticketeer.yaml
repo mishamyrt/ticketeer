@@ -1,0 +1,11 @@
+allow_empty: false
+# branch_format: "*/{ticket}*"
+# message:
+#   location: subject # body, subject. default: body
+#   format: "{ticket}: {subject}" # must contain {ticket} and {subject} or {body} depending on location.
+
+message:
+  location: body
+  format: |
+    Ticket: {ticket}
+
