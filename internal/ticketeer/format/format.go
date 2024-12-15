@@ -1,6 +1,8 @@
 package format
 
 import (
+	"strings"
+
 	"github.com/mishamyrt/ticketeer/internal/config"
 	"github.com/mishamyrt/ticketeer/internal/git"
 	"github.com/mishamyrt/ticketeer/internal/ticket"
@@ -19,6 +21,10 @@ func Title(
 	if err != nil {
 		return "", err
 	}
+	// Check if the title already contains the ticket id
+	if strings.HasPrefix(title, ticketPrefix) {
+		return title, nil
+	}
 	return ticketPrefix + " " + title, nil
 }
 
@@ -36,6 +42,13 @@ func Body(
 	}
 	if body == "" {
 		return ticketLine, nil
+	}
+	// Check if the body already contains the ticket id
+	lines := strings.Split(body, "\n")
+	for _, line := range lines {
+		if strings.TrimRight(line, "\n") == ticketLine {
+			return body, nil
+		}
 	}
 	return body + "\n\n" + ticketLine, nil
 }
