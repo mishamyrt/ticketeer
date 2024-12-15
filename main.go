@@ -1,9 +1,11 @@
 package main
 
 import (
+	"os"
+
 	"github.com/mishamyrt/ticketeer/cmd"
 )
 
 func main() {
-	cmd.Ticketeer()
+	os.Exit(cmd.Ticketeer())
 }
