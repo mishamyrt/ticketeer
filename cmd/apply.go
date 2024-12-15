@@ -14,7 +14,6 @@ func (apply) New(opts *ticketeer.Options) *cobra.Command {
 		Use:     "apply",
 		Short:   "Append ticket id to commit message",
 		Example: "ticketeer apply",
-		Args:    cobra.MaximumNArgs(0),
 		RunE: func(_ *cobra.Command, _ []string) error {
 			return ticketeer.Apply(opts, &applyArgs)
 		},

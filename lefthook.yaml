@@ -1,0 +1,4 @@
+prepare-commit-msg:
+  commands:
+    append-ticket-id:
+      run: build/ticketeer apply

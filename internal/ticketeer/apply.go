@@ -6,7 +6,7 @@ import (
 	"github.com/mishamyrt/ticketeer/internal/config"
 	"github.com/mishamyrt/ticketeer/internal/git"
 	"github.com/mishamyrt/ticketeer/internal/ticket"
-	"github.com/mishamyrt/ticketeer/internal/ticketeer/render"
+	"github.com/mishamyrt/ticketeer/internal/ticketeer/format"
 )
 
 // ApplyArgs represent arguments for apply command
@@ -44,12 +44,7 @@ func Apply(opts *Options, args *ApplyArgs) error {
 		return err
 	}
 
-	switch cfg.TicketLocation {
-	case config.TicketLocationTitle:
-		message.Title, err = render.Title(cfg.Template, message.Title, ticketID)
-	case config.TicketLocationBody:
-		message.Body, err = render.Body(cfg.Template, message.Body, ticketID)
-	}
+	err = format.Message(&message, ticketID, cfg)
 	if err != nil {
 		return err
 	}

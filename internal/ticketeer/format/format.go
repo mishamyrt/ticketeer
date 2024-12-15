@@ -1,6 +1,8 @@
-package render
+package format
 
 import (
+	"github.com/mishamyrt/ticketeer/internal/config"
+	"github.com/mishamyrt/ticketeer/internal/git"
 	"github.com/mishamyrt/ticketeer/internal/ticket"
 	"github.com/mishamyrt/ticketeer/internal/tpl"
 )
@@ -27,4 +29,16 @@ func Body(
 		"ticket": id.String(),
 		"body":   body,
 	})
+}
+
+// Message appends ticket id to commit message
+func Message(message *git.CommitMessage, ticketID ticket.ID, cfg config.Config) error {
+	var err error
+	switch cfg.TicketLocation {
+	case config.TicketLocationTitle:
+		message.Title, err = Title(cfg.Template, message.Title, ticketID)
+	case config.TicketLocationBody:
+		message.Body, err = Body(cfg.Template, message.Body, ticketID)
+	}
+	return err
 }
