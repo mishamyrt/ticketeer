@@ -8,6 +8,14 @@ Utility to insert task ticket id into commit message.
 - **Environment agnostic**. Works with any platform that can run git;
 - **Fast**. Won't slow down your commit process as actions are performed instantly.
 
+## Installation
+
+### Via `go`
+
+```bash
+go install github.com/mishamyrt/ticketeer@latest
+```
+
 ## Usage
 
 Add a `ticketeer apply` command call to the `prepare-commit-msg` hook in your hook runner.
