@@ -44,7 +44,11 @@ func Apply(opts *Options, args *ApplyArgs) error {
 		cfg.Branch.Format,
 	)
 	if err != nil {
-		return err
+		if !cfg.Ticket.AllowEmpty {
+			return err
+		}
+		fmt.Println("Ticket not found in branch, skipping")
+		return nil
 	}
 
 	id, err := ticket.ParseID(rawID, cfg.Ticket.Format)
