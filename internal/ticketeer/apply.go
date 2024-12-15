@@ -3,6 +3,8 @@ package ticketeer
 import (
 	"errors"
 	"fmt"
+	"regexp"
+	"strings"
 
 	"github.com/mishamyrt/ticketeer/internal/config"
 	"github.com/mishamyrt/ticketeer/internal/git"
@@ -27,6 +29,17 @@ func Apply(opts *Options, args *ApplyArgs) error {
 	branchName, err := git.ReadBranchName()
 	if err != nil {
 		return err
+	}
+
+	matcher := branchMatcher(cfg.Branch.Ignore)
+	isIgnored, err := matcher.Match(branchName.String())
+	if err != nil {
+		return err
+	}
+
+	if isIgnored {
+		fmt.Println("Branch is ignored, skipping")
+		return nil
 	}
 
 	var message git.CommitMessage
@@ -67,4 +80,35 @@ func Apply(opts *Options, args *ApplyArgs) error {
 	}
 
 	return git.WriteCommitMessage(message)
+}
+
+type branchMatcher []string
+
+func (m branchMatcher) Match(branchName string) (bool, error) {
+	for _, assertion := range m {
+		if !strings.Contains(assertion, "*") {
+			if assertion == branchName {
+				return true, nil
+			}
+			continue
+		}
+		re, err := m.build(assertion)
+		if err != nil {
+			return false, err
+		}
+		if re.MatchString(branchName) {
+			return true, nil
+		}
+	}
+	return false, nil
+}
+
+func (m branchMatcher) build(branchPath string) (*regexp.Regexp, error) {
+	forbidden := regexp.MustCompile(`[\?\.\[\]\(\)\$\^]+`)
+	reText := forbidden.ReplaceAllStringFunc(branchPath, func(match string) string {
+		return fmt.Sprintf("\\%s", match)
+	})
+	reText = strings.ReplaceAll(reText, "*", ".*")
+	reText = fmt.Sprintf("^%s$", reText)
+	return regexp.Compile(reText)
 }
