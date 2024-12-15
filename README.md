@@ -1,6 +1,12 @@
 # Ticketeer [![Quality assurance](https://github.com/mishamyrt/ticketeer/actions/workflows/quality-assurance.yaml/badge.svg)](https://github.com/mishamyrt/ticketeer/actions/workflows/quality-assurance.yaml)
 
+<img src="./docs/logo.svg" align="right" width="100" />
+
 Utility to insert task ticket id into commit message.
+
+- **Simple**. Does not need to be configured;
+- **Environment agnostic**. Works with any platform that can run git;
+- **Fast**. Won't slow down your commit process as actions are performed instantly.
 
 ## Usage
 
