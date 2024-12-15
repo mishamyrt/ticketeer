@@ -13,3 +13,30 @@ prepare-commit-msg:
     append-ticket-id:
       run: ticketeer apply
 ```
+
+## Configuration
+
+Ticketeer is configured by default to be as comfortable as possible for most, but the settings can be overridden. All options are optional (hehe), if you don't specify your own - default value will be used.
+
+- `message`
+  - `location` - where to insert ticket id into commit message (`title` or `body`).
+  - `template` - template to use when inserting ticket id into commit message. Must include `{ticket}` variable.
+- `ticket`
+  - `format` - format of ticket id (`numeric`, `alphanumeric`, `alphanumeric-small`, `alphanumeric-caps`).
+  - `allow-empty` - allow empty ticket id. If set to `false`, commit will be aborted if branch name doesn't contain ticket id.
+- `branch`
+  - `format` - format of branch name (`git-flow`, `git-flow-typeless`, `ticket-id`).
+  - `ignore` - Additional list of branch names to ignore. Default value is `["main", "master", "develop", "dev", "release/*"]`.
+
+Default configuration is as follows:
+
+```yaml
+message:
+  location: body
+  template: "{ticket}"
+ticket:
+  format: alphanumeric-caps
+  allow-empty: true
+branch:
+  format: git-flow
+```
