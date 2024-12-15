@@ -3,21 +3,26 @@ package hook
 import (
 	"bytes"
 	"embed"
+	"fmt"
 	"html/template"
 	"runtime"
 )
 
-//go:embed *
+//go:embed template/*
 var templatesFS embed.FS
 
 type hookTmplData struct {
 	Extension string
 }
 
+func getTemplatePath() string {
+	return fmt.Sprintf("template/%s.tmpl", Name)
+}
+
 // Content returns hook content
 func Content() []byte {
 	buf := &bytes.Buffer{}
-	t := template.Must(template.ParseFS(templatesFS, Name+".tmpl"))
+	t := template.Must(template.ParseFS(templatesFS, getTemplatePath()))
 	err := t.Execute(buf, hookTmplData{
 		Extension: getExtension(),
 	})

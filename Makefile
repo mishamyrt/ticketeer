@@ -9,6 +9,10 @@ TEST_MODULES := $(shell go list ./... | grep -v -e /cmd/)
 build:
 	go build -o build/ticketeer .
 
+.PHONY: install
+install:
+	go install
+
 .PHONY: test
 test:
 	@go test $(TEST_MODULES)
