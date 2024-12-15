@@ -6,8 +6,8 @@ import (
 )
 
 var defaultTemplates = map[TicketLocation]tpl.Template{
-	TicketLocationTitle: "{ticket}: {title}",
-	TicketLocationBody:  "{body}{ticket}",
+	TicketLocationTitle: "{ticket}:",
+	TicketLocationBody:  "{ticket}",
 }
 
 var defaultConfig = Config{

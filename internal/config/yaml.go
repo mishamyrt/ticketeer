@@ -113,6 +113,8 @@ func ParseYAMLMessage(raw YAMLMessageConfig) (MessageConfig, error) {
 	}
 	if raw.Template != nil {
 		config.Template = tpl.Template(*raw.Template)
+	} else {
+		config.Template = defaultTemplates[config.Location]
 	}
 	return config, nil
 }
