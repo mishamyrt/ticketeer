@@ -18,8 +18,21 @@ go install github.com/mishamyrt/ticketeer@latest
 
 ## Usage
 
-Add a `ticketeer apply` command call to the `prepare-commit-msg` hook in your hook runner.
-For example, for [lefthook](https://github.com/evilmartians/lefthook/tree/master) it would look like this:
+### Standalone
+
+Ticketeer can be used as a standalone tool. To install hook, run:
+
+```bash
+ticketeer install
+```
+
+The utility will check for installed hooks and install its own.
+
+### Runner
+
+If you are already using runner hooks on your project and want to keep everything under their control, add a `ticketeer apply` call to your runner configuration.
+
+#### [Lefthook](https://github.com/evilmartians/lefthook)
 
 ```yaml
 prepare-commit-msg:
