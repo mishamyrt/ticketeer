@@ -13,10 +13,13 @@ func Title(
 	title string,
 	id ticket.ID,
 ) (string, error) {
-	return template.Render(tpl.Variables{
+	ticketPrefix, err := template.Render(tpl.Variables{
 		"ticket": id.String(),
-		"title":  title,
 	})
+	if err != nil {
+		return "", err
+	}
+	return ticketPrefix + " " + title, nil
 }
 
 // Body renders the body of the message
@@ -25,16 +28,22 @@ func Body(
 	body string,
 	id ticket.ID,
 ) (string, error) {
-	return template.Render(tpl.Variables{
+	ticketLine, err := template.Render(tpl.Variables{
 		"ticket": id.String(),
-		"body":   body,
 	})
+	if err != nil {
+		return "", err
+	}
+	if body == "" {
+		return ticketLine, nil
+	}
+	return body + "\n\n" + ticketLine, nil
 }
 
 // Message appends ticket id to commit message
-func Message(message *git.CommitMessage, ticketID ticket.ID, cfg config.Config) error {
+func Message(message *git.CommitMessage, ticketID ticket.ID, cfg config.MessageConfig) error {
 	var err error
-	switch cfg.TicketLocation {
+	switch cfg.Location {
 	case config.TicketLocationTitle:
 		message.Title, err = Title(cfg.Template, message.Title, ticketID)
 	case config.TicketLocationBody:

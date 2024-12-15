@@ -1,6 +1,7 @@
 package ticketeer
 
 import (
+	"errors"
 	"fmt"
 
 	"github.com/mishamyrt/ticketeer/internal/config"
@@ -16,8 +17,10 @@ type ApplyArgs struct {
 
 // Apply appends ticket id to commit message
 func Apply(opts *Options, args *ApplyArgs) error {
-	cfg, err := config.FromYAML(opts.ConfigPath)
-	if err != nil {
+	cfg, err := config.FromYAMLFile(opts.ConfigPath)
+	if err != nil &&
+		(!errors.Is(err, config.ErrFileNotFound) ||
+			opts.ConfigPath != config.DefaultPath) {
 		return err
 	}
 
@@ -36,15 +39,20 @@ func Apply(opts *Options, args *ApplyArgs) error {
 		return err
 	}
 
-	ticketID, err := ticket.ParseFromBranchName(
+	rawID, err := ticket.FindInBranch(
 		branchName.String(),
-		ticket.AlphanumericFormat, // TODO: get format from config
+		cfg.Branch.Format,
 	)
 	if err != nil {
 		return err
 	}
 
-	err = format.Message(&message, ticketID, cfg)
+	id, err := ticket.ParseID(rawID, cfg.Ticket.Format)
+	if err != nil {
+		return err
+	}
+
+	err = format.Message(&message, id, cfg.Message)
 	if err != nil {
 		return err
 	}

@@ -1,10 +1,31 @@
 package config
 
-import "github.com/mishamyrt/ticketeer/internal/tpl"
+import (
+	"github.com/mishamyrt/ticketeer/internal/ticket"
+	"github.com/mishamyrt/ticketeer/internal/tpl"
+)
+
+// TicketConfig represents ticket configuration
+type TicketConfig struct {
+	Format     ticket.IDFormat
+	AllowEmpty bool
+}
+
+// BranchConfig represents branch configuration
+type BranchConfig struct {
+	Format ticket.BranchFormat
+	Ignore []string
+}
+
+// MessageConfig represents message configuration
+type MessageConfig struct {
+	Location TicketLocation
+	Template tpl.Template
+}
 
 // Config represents configuration
 type Config struct {
-	AllowEmpty     bool
-	TicketLocation TicketLocation
-	Template       tpl.Template
+	Ticket  TicketConfig
+	Branch  BranchConfig
+	Message MessageConfig
 }
