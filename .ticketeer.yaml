@@ -1,0 +1,8 @@
+message:
+  location: body
+  template: "Issue: #{ticket}"
+ticket:
+  format: numeric # alphanumeric, alphanumeric-small, alphanumeric-caps, numeric
+  allow-empty: true
+branch:
+  format: git-flow # git-flow-typeless, git-flow, ticket-id
