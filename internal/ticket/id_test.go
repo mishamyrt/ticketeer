@@ -10,7 +10,7 @@ func TestAssert(t *testing.T) {
 	t.Parallel()
 	var tests = []struct {
 		id      string
-		want    ticket.ID
+		want    string
 		format  ticket.IDFormat
 		wantErr bool
 	}{
@@ -42,7 +42,7 @@ func TestAssert(t *testing.T) {
 				t.Errorf("Assert() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
-			if got != tt.want {
+			if got.String() != tt.want {
 				t.Errorf("Assert() got = %v, want %v", got, tt.want)
 			}
 		})

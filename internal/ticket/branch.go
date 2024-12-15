@@ -22,10 +22,7 @@ var (
 
 // FindInBranch parses ticket id from branch name
 func FindInBranch(branchName string, format BranchFormat) (string, error) {
-	re, err := regexp.Compile(string(format))
-	if err != nil {
-		return "", err
-	}
+	re := regexp.MustCompile(string(format))
 	match := re.FindStringSubmatch(branchName)
 	if len(match) < 2 || len(match[1]) < 2 {
 		return "", ErrInvalidBranchName

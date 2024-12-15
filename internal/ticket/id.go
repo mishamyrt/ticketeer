@@ -36,10 +36,7 @@ func (t ID) String() string {
 
 // ParseID parses ticket id from string
 func ParseID(s string, format IDFormat) (ID, error) {
-	re, err := regexp.Compile(string(format))
-	if err != nil {
-		return "", err
-	}
+	re := regexp.MustCompile(string(format))
 	match := re.FindStringSubmatch(s)
 	if len(match) < 2 || len(match[1]) < 1 {
 		return "", ErrInvalidFormat
