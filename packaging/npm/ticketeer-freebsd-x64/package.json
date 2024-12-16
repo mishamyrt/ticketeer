@@ -1,6 +1,6 @@
 {
   "name": "ticketeer-freebsd-x64",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "The FreeBSD 64-bit binary for ticketeer, commit message utility.",
   "preferUnplugged": false,
   "repository": {
