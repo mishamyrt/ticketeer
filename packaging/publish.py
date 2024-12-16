@@ -52,8 +52,8 @@ def set_npm_version(content: str, version: str) -> str:
 
 def pack_npm(target: str) -> str:
     """Update version in all files"""
-    # # Set npm packages version
-    packages = NPM_PACKAGES_DIR.glob("*/package.json")
+    # Set npm packages version
+    packages = list(NPM_PACKAGES_DIR.glob("*/package.json"))
     for package in packages:
         print(f"Updating {package}")
         with open(package, "r", encoding="utf-8") as f:
@@ -66,7 +66,7 @@ def pack_npm(target: str) -> str:
         print(f"Copying {key} to {value}")
         src = DIST_DIR / key
         dst = NPM_PACKAGES_DIR / value
-        shutil.copy2(src, dst)
+        shutil.copy(src, dst)
     # Publish npm packages
     for package in packages:
         package_dir = package.parent
@@ -77,7 +77,7 @@ def pack_npm(target: str) -> str:
             print(f"Failed to publish {package_dir}")
             print(e.stderr)
             continue
-
+    print(f"Published {target}")
     return target
 
 if __name__ == "__main__":
