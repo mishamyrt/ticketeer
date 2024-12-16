@@ -15,8 +15,14 @@ build:
 install:
 	go install
 
+.PHONY: clean
+clean:
+	rm -rf build
+	rm -rf dist
+	rm -f packaging/npm/ticketeer-*/ticketeer
+
 .PHONY: release
-release:
+release: clean
 	@goreleaser release --snapshot --clean
     python3 packaging/publish.py $(VERSION)
     git add packaging/npm
@@ -51,10 +57,6 @@ coverage:
 	@mkdir -p coverage
 	@go test -coverprofile=coverage/cover.out $(TEST_MODULES)
 	@go tool cover -html coverage/cover.out -o coverage/cover.html
-
-.PHONY: clean
-clean:
-	rm -rf build
 
 .PHONY: check
 check:
