@@ -1,0 +1,22 @@
+{
+  "name": "ticketeer-openbsd-x64",
+  "version": "0.1.0",
+  "description": "The OpenBSD 64-bit binary for ticketeer, commit message utility.",
+  "preferUnplugged": false,
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mishamyrt/ticketeer.git"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mishamyrt/ticketeer/issues",
+    "email": "misha@myrt.co"
+  },
+  "homepage": "https://github.com/mishamyrt/ticketeer#readme",
+  "os": [
+    "openbsd"
+  ],
+  "cpu": [
+    "x64"
+  ]
+}

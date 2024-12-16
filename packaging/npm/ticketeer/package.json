@@ -1,0 +1,36 @@
+{
+  "name": "ticketeer",
+  "version": "0.1.0",
+  "description": "Utility to insert task ticket id into commit message",
+  "main": "bin/index.js",
+  "bin": {
+    "ticketeer": "bin/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mishamyrt/ticketeer.git"
+  },
+  "keywords": [
+    "git",
+    "hook"
+  ],
+  "author": "mishamyrt",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mishamyrt/ticketeer/issues",
+    "email": "misha@myrt.co"
+  },
+  "homepage": "https://github.com/mishamyrt/ticketeer#readme",
+  "optionalDependencies": {
+    "ticketeer-darwin-arm64": "0.1.0",
+    "ticketeer-darwin-x64": "0.1.0",
+    "ticketeer-linux-arm64": "0.1.0",
+    "ticketeer-linux-x64": "0.1.0",
+    "ticketeer-freebsd-arm64": "0.1.0",
+    "ticketeer-freebsd-x64": "0.1.0",
+    "ticketeer-openbsd-arm64": "0.1.0",
+    "ticketeer-openbsd-x64": "0.1.0",
+    "ticketeer-windows-arm64": "0.1.0",
+    "ticketeer-windows-x64": "0.1.0"
+  }
+}

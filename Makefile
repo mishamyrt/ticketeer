@@ -1,4 +1,4 @@
-VERSION = v0.1.0
+VERSION = 0.1.0
 
 GOLANGCI_LINT_VERSION = v1.62.2
 REVIVE_VERSION = v1.5.1
@@ -18,6 +18,12 @@ install:
 .PHONY: release
 release:
 	@goreleaser release --snapshot --clean
+    python3 packaging/publish.py $(VERSION)
+    git add packaging/npm
+    git add Makefile
+    git commit -m "chore: release $(VERSION)"
+    git tag -a $(VERSION) -m "release $(VERSION)"
+    git push && git push --tags
 
 .PHONY: test
 test:

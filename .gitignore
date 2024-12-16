@@ -3,3 +3,7 @@ build/
 coverage/
 dist/
 .DS_Store
+node_modules
+testrepo
+packaging/npm/ticketeer-*/ticketeer
+packaging/npm/ticketeer-*/ticketeer.exe
