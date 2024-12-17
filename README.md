@@ -10,10 +10,28 @@ Utility to insert task ticket id into commit message.
 
 ## Installation
 
-### Via `go`
+### go
 
 ```bash
 go install github.com/mishamyrt/ticketeer@latest
+```
+
+### pnpm
+
+```bash
+pnpm add --save-dev ticketeer
+```
+
+### npm
+
+```bash
+npm install --save-dev ticketeer
+```
+
+### yarn
+
+```bash
+yarn add --dev ticketeer
 ```
 
 ## Usage
@@ -34,12 +52,16 @@ If you are already using runner hooks on your project and want to keep everythin
 
 #### [Lefthook](https://github.com/evilmartians/lefthook)
 
+Add the following to your `lefthook.yml` file:
+
 ```yaml
 prepare-commit-msg:
   commands:
     append-ticket-id:
       run: ticketeer apply
 ```
+
+If ticketeer is installed using NodeJS package manager, prefix command with your package manager runner, e.g. `pnpm ticketeer apply`, `yarn ticketeer apply` or `npx ticketeer apply`.
 
 ## Configuration
 
