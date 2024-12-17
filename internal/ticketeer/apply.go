@@ -57,16 +57,12 @@ func Apply(opts *Options, args *ApplyArgs) error {
 		cfg.Branch.Format,
 	)
 	if err != nil {
-		if !cfg.Ticket.AllowEmpty {
-			return err
-		}
-		fmt.Println("Ticket not found in branch, skipping")
-		return nil
+		return handleEmptyTicket(err, cfg.Ticket.AllowEmpty)
 	}
 
 	id, err := ticket.ParseID(rawID, cfg.Ticket.Format)
 	if err != nil {
-		return err
+		return handleEmptyTicket(err, cfg.Ticket.AllowEmpty)
 	}
 
 	err = format.Message(&message, id, cfg.Message)
@@ -80,6 +76,14 @@ func Apply(opts *Options, args *ApplyArgs) error {
 	}
 
 	return git.WriteCommitMessage(message)
+}
+
+func handleEmptyTicket(err error, allowEmpty bool) error {
+	if !allowEmpty {
+		return err
+	}
+	fmt.Println("Ticket ID is not found in branch name, skipping")
+	return nil
 }
 
 type branchMatcher []string
