@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"os"
+	"path/filepath"
 
 	"github.com/mishamyrt/ticketeer/internal/git"
 	"github.com/mishamyrt/ticketeer/internal/hook"
@@ -38,13 +39,13 @@ func Install(_ *Options, force bool) error {
 	// Check installed hook runner
 	runner, err := hook.DetectRunner(hookPath)
 	if err != nil {
-		if errors.Is(err, hook.ErrUnknownRunner) {
-			fmt.Println("Detected unknown hook.")
-			fmt.Println("To replace the hook, run:")
-			fmt.Println("  ticketeer install --force")
-			return nil
+		if !errors.Is(err, hook.ErrUnknownRunner) {
+			return err
 		}
-		return err
+		fmt.Println("Detected unknown hook.")
+		fmt.Println("To replace the hook, run:")
+		fmt.Println("  ticketeer install --force")
+		return nil
 	}
 
 	fmt.Printf("Detected %s. You can use it in tandem with ticketeer!\n", runner.Name)
@@ -75,5 +76,5 @@ func getHookPath(repo git.Repository) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	return hook.Path("prepare-commit-msg", hooksDir), nil
+	return filepath.Join(hooksDir, hook.Name), nil
 }

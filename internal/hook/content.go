@@ -7,10 +7,13 @@ import (
 	"runtime"
 )
 
+// Name represents ticketeer git hook
+const Name = "prepare-commit-msg"
+
 //go:embed template/*
 var templatesFS embed.FS
 
-const templatePath = "template/prepare-commit-msg.tmpl"
+const templatePath = "template/" + Name + ".tmpl"
 
 type hookTmplData struct {
 	Extension string

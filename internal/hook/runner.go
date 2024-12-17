@@ -8,7 +8,7 @@ import (
 
 var (
 	// ErrUnknownRunner is returned when hook runner is unknown
-	ErrUnknownRunner = errors.New("hook runner is unknown")
+	ErrUnknownRunner = errors.New("unable to detect git hook runner from file content")
 )
 
 // Runner represents git hook runner
