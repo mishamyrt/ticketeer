@@ -17,17 +17,17 @@ type hookTmplData struct {
 }
 
 // Content returns hook content
-func Content() []byte {
+func Content() ([]byte, error) {
 	buf := &bytes.Buffer{}
 	t := template.Must(template.ParseFS(templatesFS, templatePath))
 	err := t.Execute(buf, hookTmplData{
 		Extension: getExtension(),
 	})
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
 
-	return buf.Bytes()
+	return buf.Bytes(), nil
 }
 
 func getExtension() string {
