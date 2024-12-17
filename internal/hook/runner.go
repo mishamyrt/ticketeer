@@ -26,6 +26,7 @@ var runners = []Runner{
 	{
 		Name:        "lefthook",
 		GuideAnchor: "lefthook",
+		// Detects lefthook runner by checking for its binary environment variable
 		assert: func(content string) bool {
 			return strings.Contains(content, "LEFTHOOK_BIN")
 		},
@@ -33,6 +34,7 @@ var runners = []Runner{
 	{
 		Name:        "ticketeer",
 		GuideAnchor: "",
+		// Detects ticketeer runner by checking for its binary environment variable
 		assert: func(content string) bool {
 			return strings.Contains(content, "TICKETEER_BIN")
 		},
