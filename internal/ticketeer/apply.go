@@ -28,7 +28,8 @@ func Apply(opts *Options, args *ApplyArgs) error {
 
 	branchName, err := git.ReadBranchName()
 	if err != nil {
-		return err
+		fmt.Println("Branch is not found, skipping")
+		return nil
 	}
 
 	matcher := branchMatcher(cfg.Branch.Ignore)
