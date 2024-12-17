@@ -42,6 +42,7 @@ func Install(_ *Options, force bool) error {
 			fmt.Println("Detected unknown hook.")
 			fmt.Println("To replace the hook, run:")
 			fmt.Println("  ticketeer install --force")
+			return nil
 		}
 		return err
 	}
@@ -51,7 +52,7 @@ func Install(_ *Options, force bool) error {
 	fmt.Println("To replace the hook, run:")
 	fmt.Println("  ticketeer install --force")
 
-	return err
+	return nil
 }
 
 func installHook(hookPath string) error {
