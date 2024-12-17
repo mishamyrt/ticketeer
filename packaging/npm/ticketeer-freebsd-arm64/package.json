@@ -1,6 +1,6 @@
 {
   "name": "ticketeer-freebsd-arm64",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "The FreeBSD arm64 binary for ticketeer, commit message utility.",
   "preferUnplugged": false,
   "repository": {
