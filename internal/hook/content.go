@@ -3,7 +3,6 @@ package hook
 import (
 	"bytes"
 	"embed"
-	"fmt"
 	"html/template"
 	"runtime"
 )
@@ -11,18 +10,16 @@ import (
 //go:embed template/*
 var templatesFS embed.FS
 
+const templatePath = "template/prepare-commit-msg.tmpl"
+
 type hookTmplData struct {
 	Extension string
-}
-
-func getTemplatePath() string {
-	return fmt.Sprintf("template/%s.tmpl", Name)
 }
 
 // Content returns hook content
 func Content() []byte {
 	buf := &bytes.Buffer{}
-	t := template.Must(template.ParseFS(templatesFS, getTemplatePath()))
+	t := template.Must(template.ParseFS(templatesFS, templatePath))
 	err := t.Execute(buf, hookTmplData{
 		Extension: getExtension(),
 	})
