@@ -6,8 +6,10 @@ import (
 	"strings"
 )
 
-// ErrUnknownRunner is returned when hook runner is unknown
-var ErrUnknownRunner = errors.New("hook runner is unknown")
+var (
+	// ErrUnknownRunner is returned when hook runner is unknown
+	ErrUnknownRunner = errors.New("hook runner is unknown")
+)
 
 // Runner represents git hook runner
 type Runner struct {
@@ -39,6 +41,16 @@ var runners = []Runner{
 
 // DetectRunner returns hook runner based on hook content
 func DetectRunner(path string) (*Runner, error) {
+	info, err := os.Stat(path)
+	if err != nil {
+		if os.IsNotExist(err) {
+			return nil, nil
+		}
+		return nil, err
+	}
+	if info.Size() > 1024*1024 { // 1MB limit
+		return nil, ErrUnknownRunner
+	}
 	content, err := os.ReadFile(path)
 	if err != nil {
 		return nil, err
