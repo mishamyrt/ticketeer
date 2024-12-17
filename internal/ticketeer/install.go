@@ -26,14 +26,12 @@ func Install(_ *Options, force bool) error {
 	_, err = os.Stat(hookPath)
 	if err != nil {
 		if os.IsNotExist(err) {
-			fmt.Println("Installing hook...")
 			return installHook(hookPath)
 		}
 		return err
 	}
 
 	if force {
-		fmt.Println("Replacing hook...")
 		return installHook(hookPath)
 	}
 
@@ -58,7 +56,11 @@ func Install(_ *Options, force bool) error {
 
 func installHook(hookPath string) error {
 	fmt.Println("⚙️ Installing hook...")
-	err := os.WriteFile(hookPath, hook.Content(), 0755)
+	content, err := hook.Content()
+	if err != nil {
+		return err
+	}
+	err = os.WriteFile(hookPath, content, 0755)
 	if err != nil {
 		fmt.Printf("Error: %s\n", err)
 		return err
