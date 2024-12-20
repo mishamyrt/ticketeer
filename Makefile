@@ -60,7 +60,7 @@ lint:
 .PHONY: coverage
 coverage:
 	@mkdir -p coverage
-	@go test -coverprofile=coverage/cover.out $(TEST_MODULES)
+	@go test -v -coverprofile=coverage/cover.out $(TEST_MODULES)
 	@go tool cover -html coverage/cover.out -o coverage/cover.html
 
 .PHONY: check
