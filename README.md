@@ -1,4 +1,4 @@
-# Ticketeer [![Quality assurance](https://github.com/mishamyrt/ticketeer/actions/workflows/quality-assurance.yaml/badge.svg)](https://github.com/mishamyrt/ticketeer/actions/workflows/quality-assurance.yaml)
+# Ticketeer [![Quality assurance](https://github.com/mishamyrt/ticketeer/actions/workflows/quality-assurance.yaml/badge.svg)](https://github.com/mishamyrt/ticketeer/actions/workflows/quality-assurance.yaml) [![Coverage Status](https://coveralls.io/repos/github/mishamyrt/ticketeer/badge.svg?branch=main)](https://coveralls.io/github/mishamyrt/ticketeer?branch=main)
 
 <img src="./docs/logo.svg" align="right" width="100" />
 
