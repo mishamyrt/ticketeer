@@ -22,23 +22,31 @@ type Runner struct {
 	assert func(content string) bool
 }
 
-var runners = []Runner{
-	{
+var (
+	// LefthookRunner represents lefthook runner
+	LefthookRunner = Runner{
 		Name:        "lefthook",
 		GuideAnchor: "lefthook",
 		// Detects lefthook runner by checking for its binary environment variable
 		assert: func(content string) bool {
 			return strings.Contains(content, "LEFTHOOK_BIN")
 		},
-	},
-	{
+	}
+
+	// TicketeerRunner represents ticketeer runner
+	TicketeerRunner = Runner{
 		Name:        "ticketeer",
 		GuideAnchor: "",
 		// Detects ticketeer runner by checking for its binary environment variable
 		assert: func(content string) bool {
 			return strings.Contains(content, "TICKETEER_BIN")
 		},
-	},
+	}
+)
+
+var runners = []*Runner{
+	&TicketeerRunner,
+	&LefthookRunner,
 }
 
 // DetectRunner returns hook runner based on hook content
@@ -59,7 +67,7 @@ func DetectRunner(path string) (*Runner, error) {
 	}
 	for _, runner := range runners {
 		if runner.assert(string(content)) {
-			return &runner, nil
+			return runner, nil
 		}
 	}
 	return nil, ErrUnknownRunner
