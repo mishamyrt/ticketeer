@@ -7,7 +7,7 @@ import (
 // RandomBytes returns random byte slice of given size.
 func RandomBytes(size int) []byte {
 	token := make([]byte, size)
-	rand.Read(token)
+	_, _ = rand.Read(token)
 
 	return token
 }
