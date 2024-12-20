@@ -26,14 +26,19 @@ func Apply(opts *Options, args *ApplyArgs) error {
 		return err
 	}
 
-	branchName, err := git.ReadBranchName()
+	repo, err := git.OpenRepository(".")
+	if err != nil {
+		return err
+	}
+
+	branchName, err := repo.BranchName()
 	if err != nil {
 		fmt.Println("Branch is not found, skipping")
 		return nil
 	}
 
 	matcher := branchMatcher(cfg.Branch.Ignore)
-	isIgnored, err := matcher.Match(branchName.String())
+	isIgnored, err := matcher.Match(branchName)
 	if err != nil {
 		return err
 	}
@@ -47,16 +52,13 @@ func Apply(opts *Options, args *ApplyArgs) error {
 	if args.DryRunWith != "" {
 		message, err = git.ParseCommitMessage(args.DryRunWith)
 	} else {
-		message, err = git.ReadCommitMessage()
+		message, err = repo.CommitMessage()
 	}
 	if err != nil {
 		return err
 	}
 
-	rawID, err := ticket.FindInBranch(
-		branchName.String(),
-		cfg.Branch.Format,
-	)
+	rawID, err := ticket.FindInBranch(branchName, cfg.Branch.Format)
 	if err != nil {
 		return handleEmptyTicket(err, cfg.Ticket.AllowEmpty)
 	}
@@ -76,7 +78,7 @@ func Apply(opts *Options, args *ApplyArgs) error {
 		return nil
 	}
 
-	return git.WriteCommitMessage(message)
+	return repo.SetCommitMessage(message)
 }
 
 func handleEmptyTicket(err error, allowEmpty bool) error {
