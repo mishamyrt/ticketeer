@@ -71,8 +71,8 @@ func installHook(hookPath string) error {
 	return nil
 }
 
-func getHookPath(repo git.Repository) (string, error) {
-	hooksDir, err := repo.HooksPath()
+func getHookPath(repo *git.Repository) (string, error) {
+	hooksDir, err := repo.HooksDir()
 	if err != nil {
 		return "", err
 	}

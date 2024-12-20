@@ -2,8 +2,6 @@ package git
 
 import (
 	"errors"
-	"os"
-	"path/filepath"
 	"strings"
 )
 
@@ -13,8 +11,6 @@ var (
 	// ErrCommitNotFound is returned when commit file is not found
 	ErrCommitNotFound = errors.New("commit file is not found")
 )
-
-var messagePath = filepath.Join(".git", "COMMIT_EDITMSG")
 
 // CommitMessage represents commit message
 type CommitMessage struct {
@@ -33,6 +29,11 @@ func (m CommitMessage) String() string {
 	return s.String()
 }
 
+// Bytes returns byte representation of commit message
+func (m CommitMessage) Bytes() []byte {
+	return []byte(m.String())
+}
+
 // ParseCommitMessage parses commit message to parts
 func ParseCommitMessage(text string) (CommitMessage, error) {
 	if len(strings.Trim(text, " \n\t")) == 0 {
@@ -48,21 +49,4 @@ func ParseCommitMessage(text string) (CommitMessage, error) {
 		Title: text[:index],
 		Body:  text[index+2:],
 	}, nil
-}
-
-// ReadCommitMessage reads and parses commit message from internal git file.
-func ReadCommitMessage() (CommitMessage, error) {
-	content, err := os.ReadFile(messagePath)
-	if err != nil {
-		if os.IsNotExist(err) {
-			err = ErrCommitNotFound
-		}
-		return CommitMessage{}, err
-	}
-	return ParseCommitMessage(string(content))
-}
-
-// WriteCommitMessage writes commit message to internal git file.
-func WriteCommitMessage(message CommitMessage) error {
-	return os.WriteFile(messagePath, []byte(message.String()), 0644)
 }

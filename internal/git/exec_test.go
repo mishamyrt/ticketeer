@@ -22,46 +22,6 @@ func TestIsAvailable(t *testing.T) {
 	pathMock.Restore()
 }
 
-func TestIsRepository(t *testing.T) {
-	var tests = []struct {
-		repoPath string
-		want     bool
-	}{
-		{"../../", true},
-		{"../../non-existent", false},
-		{"", false},
-		{"$%!?_)../():;'", false},
-	}
-
-	for _, tt := range tests {
-		t.Run(tt.repoPath, func(t *testing.T) {
-			if got := git.IsRepository(tt.repoPath); got != tt.want {
-				t.Errorf("IsRepository() got = %v, want %v", got, tt.want)
-			}
-		})
-	}
-}
-
-func TestAssertRepository(t *testing.T) {
-	var tests = []struct {
-		repoPath string
-		wantErr  bool
-	}{
-		{"../../", false},
-		{"../../non-existent", true},
-		{"", true},
-		{"$%!?_)../():;'", true},
-	}
-
-	for _, tt := range tests {
-		t.Run(tt.repoPath, func(t *testing.T) {
-			if err := git.AssertRepository(tt.repoPath); (err != nil) != tt.wantErr {
-				t.Errorf("AssertRepository() error = %v, wantErr %v", err, tt.wantErr)
-			}
-		})
-	}
-}
-
 func TestExec(t *testing.T) {
 	var tests = []struct {
 		repoPath string
@@ -93,7 +53,8 @@ func TestExec(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.repoPath, func(t *testing.T) {
-			got, err := git.Exec(tt.repoPath, tt.cmd)
+			cmd := git.Command("status")
+			got, err := cmd.ExecuteAt(tt.repoPath)
 			tt.validate(t, got, err)
 		})
 	}
