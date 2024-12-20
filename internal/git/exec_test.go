@@ -1,6 +1,7 @@
 package git_test
 
 import (
+	"errors"
 	"os"
 	"testing"
 
@@ -40,6 +41,15 @@ func TestExec(t *testing.T) {
 				return
 			}
 		}},
+		{"", "unknown-command", func(tt *testing.T, out string, err error) {
+			if err == nil {
+				t.Errorf("Exec() got nil, want error. output = %s", out)
+				return
+			} else if !errors.Is(err, git.ErrCommandFailed) {
+				t.Errorf("Exec() unexpected error = %v", err)
+				return
+			}
+		}},
 		{"../non-existent", "status", func(tt *testing.T, _ string, err error) {
 			if err == nil {
 				t.Errorf("Exec() got = %v, want error", err)
@@ -53,7 +63,7 @@ func TestExec(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.repoPath, func(t *testing.T) {
-			cmd := git.Command("status")
+			cmd := git.Command(tt.cmd)
 			got, err := cmd.ExecuteAt(tt.repoPath)
 			tt.validate(t, got, err)
 		})
