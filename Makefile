@@ -63,6 +63,12 @@ coverage:
 	@go test -v -coverprofile=coverage/cover.out $(TEST_MODULES)
 	@go tool cover -html coverage/cover.out -o coverage/cover.html
 
+.PHONY: report-coverage
+report-coverage:
+	@coveralls report \
+		--repo-token=$(COVERALLS_TICKETEER_TOKEN) \
+		coverage/cover.out
+
 .PHONY: check
 check:
 	@make lint
