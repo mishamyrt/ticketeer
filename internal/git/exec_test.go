@@ -1,7 +1,7 @@
 package git_test
 
 import (
-	"strings"
+	"os"
 	"testing"
 
 	"github.com/mishamyrt/ticketeer/internal/git"
@@ -44,7 +44,7 @@ func TestExec(t *testing.T) {
 			if err == nil {
 				t.Errorf("Exec() got = %v, want error", err)
 				return
-			} else if !strings.Contains(err.Error(), "no such file") {
+			} else if !os.IsNotExist(err) {
 				t.Errorf("Exec() unexpected error = %v", err)
 				return
 			}
