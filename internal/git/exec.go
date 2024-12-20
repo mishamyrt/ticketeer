@@ -2,6 +2,7 @@ package git
 
 import (
 	"fmt"
+	"os"
 	"os/exec"
 	"strings"
 )
@@ -27,6 +28,13 @@ func (c *Cmd) Execute() (string, error) {
 
 // ExecuteAt executes git command at given path
 func (c *Cmd) ExecuteAt(path string) (string, error) {
+	if path == "" {
+		path = "."
+	}
+	_, err := os.Stat(path)
+	if err != nil {
+		return "", err
+	}
 	previousDir := c.Dir
 	c.Dir = path
 	output, err := c.Execute()
