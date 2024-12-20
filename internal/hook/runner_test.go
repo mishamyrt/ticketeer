@@ -19,6 +19,8 @@ func TestDetectRunner(t *testing.T) {
 		wantErr bool
 	}{
 		{"", nil, false},
+		{".", nil, true},
+		{"../", nil, true},
 		{"../../testdata/hook_runners/lefthook.sh", &hook.LefthookRunner, false},
 		{"../../testdata/hook_runners/ticketeer.sh", &hook.TicketeerRunner, false},
 		{"../../testdata/hook_runners/unknown.sh", nil, true},
