@@ -7,7 +7,7 @@ import (
 
 type install struct{}
 
-func (install) New(opts *ticketeer.Options) *cobra.Command {
+func (install) New(app *ticketeer.App) *cobra.Command {
 	force := false
 
 	applyCmd := cobra.Command{
@@ -16,7 +16,7 @@ func (install) New(opts *ticketeer.Options) *cobra.Command {
 		Example: "ticketeer install",
 		Args:    cobra.MaximumNArgs(0),
 		RunE: func(_ *cobra.Command, _ []string) error {
-			return ticketeer.Install(opts, force)
+			return app.Install(force)
 		},
 	}
 

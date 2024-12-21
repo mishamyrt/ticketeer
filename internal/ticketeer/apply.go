@@ -14,15 +14,16 @@ import (
 
 // ApplyArgs represent arguments for apply command
 type ApplyArgs struct {
+	ConfigPath string
 	DryRunWith string
 }
 
 // Apply appends ticket id to commit message
-func Apply(opts *Options, args *ApplyArgs) error {
-	cfg, err := config.FromYAMLFile(opts.ConfigPath)
+func (a *App) Apply(args *ApplyArgs) error {
+	cfg, err := config.FromYAMLFile(args.ConfigPath)
 	if err != nil &&
 		(!errors.Is(err, config.ErrFileNotFound) ||
-			opts.ConfigPath != config.DefaultPath) {
+			args.ConfigPath != config.DefaultPath) {
 		return err
 	}
 
@@ -30,12 +31,14 @@ func Apply(opts *Options, args *ApplyArgs) error {
 	if err != nil {
 		return err
 	}
+	a.log.Debugf("Repository root found at: %s", repo.Path())
 
 	branchName, err := repo.BranchName()
 	if err != nil {
-		fmt.Println("Branch is not found, skipping")
+		a.log.Print("Branch is not found, skipping")
 		return nil
 	}
+	a.log.Debugf("Branch name: %s", branchName)
 
 	matcher := branchMatcher(cfg.Branch.Ignore)
 	isIgnored, err := matcher.Match(branchName)
@@ -44,7 +47,7 @@ func Apply(opts *Options, args *ApplyArgs) error {
 	}
 
 	if isIgnored {
-		fmt.Println("Branch is ignored, skipping")
+		a.log.Print("Branch is ignored, skipping")
 		return nil
 	}
 
@@ -60,13 +63,15 @@ func Apply(opts *Options, args *ApplyArgs) error {
 
 	rawID, err := ticket.FindInBranch(branchName, cfg.Branch.Format)
 	if err != nil {
-		return handleEmptyTicket(err, cfg.Ticket.AllowEmpty)
+		return a.handleEmptyTicket(err, cfg.Ticket.AllowEmpty)
 	}
 
 	id, err := ticket.ParseID(rawID, cfg.Ticket.Format)
 	if err != nil {
-		return handleEmptyTicket(err, cfg.Ticket.AllowEmpty)
+		return a.handleEmptyTicket(err, cfg.Ticket.AllowEmpty)
 	}
+
+	a.log.Debugf("Ticket ID found in branch name: %s", rawID)
 
 	err = format.Message(&message, id, cfg.Message)
 	if err != nil {
@@ -74,18 +79,19 @@ func Apply(opts *Options, args *ApplyArgs) error {
 	}
 
 	if args.DryRunWith != "" {
-		fmt.Println(message.String())
+		a.log.Warn("Running in dry-run mode")
+		print(message.String())
 		return nil
 	}
 
 	return repo.SetCommitMessage(message)
 }
 
-func handleEmptyTicket(err error, allowEmpty bool) error {
+func (a *App) handleEmptyTicket(err error, allowEmpty bool) error {
 	if !allowEmpty {
 		return err
 	}
-	fmt.Println("Ticket ID is not found in branch name, skipping")
+	a.log.Print("Ticket ID is not found in branch name, skipping")
 	return nil
 }
 
