@@ -2,13 +2,12 @@ package cmd
 
 import (
 	"github.com/MakeNowJust/heredoc"
-	"github.com/mishamyrt/ticketeer/internal/config"
 	"github.com/mishamyrt/ticketeer/internal/ticketeer"
 	"github.com/spf13/cobra"
 )
 
 type command interface {
-	New(*ticketeer.Options) *cobra.Command
+	New(*ticketeer.App) *cobra.Command
 }
 
 var commands = [...]command{
@@ -18,6 +17,7 @@ var commands = [...]command{
 
 func newRootCmd() *cobra.Command {
 	var options ticketeer.Options
+	app := ticketeer.New()
 
 	rootCmd := &cobra.Command{
 		Use:   "ticketeer",
@@ -27,6 +27,9 @@ func newRootCmd() *cobra.Command {
 				and execute the following command:
 				ticketeer install
 		`),
+		PersistentPreRun: func(_ *cobra.Command, _ []string) {
+			app.Setup(&options)
+		},
 		SilenceUsage:  true,
 		SilenceErrors: true,
 	}
@@ -34,12 +37,9 @@ func newRootCmd() *cobra.Command {
 	rootCmd.PersistentFlags().BoolVarP(
 		&options.Verbose, "verbose", "v", false, "verbose output",
 	)
-	rootCmd.PersistentFlags().StringVarP(
-		&options.ConfigPath, "config", "c", config.DefaultPath, "path to configuration file",
-	)
 
 	for _, command := range commands {
-		rootCmd.AddCommand(command.New(&options))
+		rootCmd.AddCommand(command.New(app))
 	}
 
 	return rootCmd

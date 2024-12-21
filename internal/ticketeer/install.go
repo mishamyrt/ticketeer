@@ -13,11 +13,12 @@ import (
 const readmeURL = "https://github.com/mishamyrt/ticketeer?tab=readme-ov-file"
 
 // Install git hook
-func Install(_ *Options, force bool) error {
+func (a *App) Install(force bool) error {
 	repo, err := git.OpenRepository("./")
 	if err != nil {
 		return err
 	}
+	a.log.Debugf("Repository root found at: %s", repo.Path())
 	hookPath, err := getHookPath(repo)
 	if err != nil {
 		return err
@@ -27,13 +28,15 @@ func Install(_ *Options, force bool) error {
 	_, err = os.Stat(hookPath)
 	if err != nil {
 		if os.IsNotExist(err) {
-			return installHook(hookPath)
+			a.log.Debug("Hook not found")
+			return a.installHook(hookPath)
 		}
 		return err
 	}
 
 	if force {
-		return installHook(hookPath)
+		a.log.Debug("Force installing hook")
+		return a.installHook(hookPath)
 	}
 
 	// Check installed hook runner
@@ -42,32 +45,35 @@ func Install(_ *Options, force bool) error {
 		if !errors.Is(err, hook.ErrUnknownRunner) {
 			return err
 		}
-		fmt.Println("Detected unknown hook.")
-		fmt.Println("To replace the hook, run:")
-		fmt.Println("  ticketeer install --force")
+		a.log.Warn("Detected unknown hook.")
+		a.log.Print("To replace the hook, run:")
+		a.log.Info("  ticketeer install --force")
 		return nil
 	}
 
-	fmt.Printf("Detected %s. You can use it in tandem with ticketeer!\n", runner.Name)
-	fmt.Printf("Setup instructions: %s#%s\n", readmeURL, runner.GuideAnchor)
-	fmt.Println("To replace the hook, run:")
-	fmt.Println("  ticketeer install --force")
+	if runner.GuideAnchor == "" {
+		a.log.Print("Hook already installed")
+		return nil
+	}
+
+	a.log.Warnf("Detected %s. You can use it in tandem with ticketeer!", runner.Name)
+	a.log.Printf("Setup instructions: %s#%s\n", readmeURL, runner.GuideAnchor)
+	a.log.Print("To replace the hook, run:")
+	a.log.Info("  ticketeer install --force")
 
 	return nil
 }
 
-func installHook(hookPath string) error {
-	fmt.Println("⚙️ Installing hook...")
+func (a *App) installHook(hookPath string) error {
 	content, err := hook.Content()
 	if err != nil {
 		return err
 	}
 	err = os.WriteFile(hookPath, content, 0755)
 	if err != nil {
-		fmt.Printf("Error: %s\n", err)
-		return err
+		return fmt.Errorf("%s: %w", "Failed to install hook", err)
 	}
-	fmt.Println("🚀 Hook installed")
+	a.log.Success("🚀 Hook successfully installed")
 	return nil
 }
 
