@@ -38,6 +38,10 @@ func newRootCmd() *cobra.Command {
 		&options.Verbose, "verbose", "v", false, "verbose output",
 	)
 
+	rootCmd.PersistentFlags().BoolVar(
+		&options.NoColor, "no-color", false, "disable color output",
+	)
+
 	for _, command := range commands {
 		rootCmd.AddCommand(command.New(app))
 	}

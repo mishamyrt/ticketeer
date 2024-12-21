@@ -2,7 +2,7 @@ package config
 
 import (
 	"github.com/mishamyrt/ticketeer/internal/ticket"
-	"github.com/mishamyrt/ticketeer/internal/tpl"
+	"github.com/mishamyrt/ticketeer/pkg/tpl"
 )
 
 var defaultTemplates = map[TicketLocation]tpl.Template{

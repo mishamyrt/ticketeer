@@ -6,7 +6,7 @@ import (
 	"github.com/mishamyrt/ticketeer/internal/config"
 	"github.com/mishamyrt/ticketeer/internal/git"
 	"github.com/mishamyrt/ticketeer/internal/ticket"
-	"github.com/mishamyrt/ticketeer/internal/tpl"
+	"github.com/mishamyrt/ticketeer/pkg/tpl"
 )
 
 // Title renders the title of the message

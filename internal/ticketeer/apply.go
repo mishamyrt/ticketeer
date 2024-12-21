@@ -10,6 +10,7 @@ import (
 	"github.com/mishamyrt/ticketeer/internal/git"
 	"github.com/mishamyrt/ticketeer/internal/ticket"
 	"github.com/mishamyrt/ticketeer/internal/ticketeer/format"
+	"github.com/mishamyrt/ticketeer/pkg/log"
 )
 
 // ApplyArgs represent arguments for apply command
@@ -31,14 +32,14 @@ func (a *App) Apply(args *ApplyArgs) error {
 	if err != nil {
 		return err
 	}
-	a.log.Debugf("Repository root found at: %s", repo.Path())
+	log.Debugf("Repository root found at: %s", repo.Path())
 
 	branchName, err := repo.BranchName()
 	if err != nil {
-		a.log.Print("Branch is not found, skipping")
+		log.Info("Branch is not found, skipping")
 		return nil
 	}
-	a.log.Debugf("Branch name: %s", branchName)
+	log.Debugf("Branch name: %s", branchName)
 
 	matcher := branchMatcher(cfg.Branch.Ignore)
 	isIgnored, err := matcher.Match(branchName)
@@ -47,7 +48,7 @@ func (a *App) Apply(args *ApplyArgs) error {
 	}
 
 	if isIgnored {
-		a.log.Print("Branch is ignored, skipping")
+		log.Info("Branch is ignored, skipping")
 		return nil
 	}
 
@@ -71,7 +72,7 @@ func (a *App) Apply(args *ApplyArgs) error {
 		return a.handleEmptyTicket(err, cfg.Ticket.AllowEmpty)
 	}
 
-	a.log.Debugf("Ticket ID found in branch name: %s", rawID)
+	log.Debugf("Ticket ID found in branch name: %s", rawID)
 
 	err = format.Message(&message, id, cfg.Message)
 	if err != nil {
@@ -79,7 +80,7 @@ func (a *App) Apply(args *ApplyArgs) error {
 	}
 
 	if args.DryRunWith != "" {
-		a.log.Warn("Running in dry-run mode")
+		log.Info("Running in dry-run mode")
 		print(message.String())
 		return nil
 	}
@@ -91,7 +92,7 @@ func (a *App) handleEmptyTicket(err error, allowEmpty bool) error {
 	if !allowEmpty {
 		return err
 	}
-	a.log.Print("Ticket ID is not found in branch name, skipping")
+	log.Info("Ticket ID is not found in branch name, skipping")
 	return nil
 }
 
