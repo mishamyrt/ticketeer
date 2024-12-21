@@ -3,7 +3,7 @@ package tpl_test
 import (
 	"testing"
 
-	"github.com/mishamyrt/ticketeer/internal/tpl"
+	"github.com/mishamyrt/ticketeer/pkg/tpl"
 )
 
 func TestRender(t *testing.T) {

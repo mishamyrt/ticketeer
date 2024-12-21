@@ -7,7 +7,7 @@ import (
 	"github.com/mishamyrt/ticketeer/internal/git"
 	"github.com/mishamyrt/ticketeer/internal/ticket"
 	"github.com/mishamyrt/ticketeer/internal/ticketeer/format"
-	"github.com/mishamyrt/ticketeer/internal/tpl"
+	"github.com/mishamyrt/ticketeer/pkg/tpl"
 )
 
 func TestTitle(t *testing.T) {

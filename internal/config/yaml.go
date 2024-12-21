@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/mishamyrt/ticketeer/internal/tpl"
+	"github.com/mishamyrt/ticketeer/pkg/tpl"
 	"gopkg.in/yaml.v3"
 )
 
