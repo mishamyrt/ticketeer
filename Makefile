@@ -40,6 +40,14 @@ release: clean
 test:
 	@go test $(TEST_MODULES)
 
+test-e2e: install
+	@go test \
+		-race \
+		-count=1 \
+		-timeout=30s \
+		-tags=e2e \
+		e2e_test.go
+
 .PHONY: setup
 setup:
 	curl -sSfL \
