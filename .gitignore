@@ -7,3 +7,4 @@ node_modules
 testrepo
 packaging/npm/ticketeer-*/ticketeer
 packaging/npm/ticketeer-*/ticketeer.exe
+/ticketeer

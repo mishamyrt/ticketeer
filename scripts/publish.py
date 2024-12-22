@@ -5,28 +5,10 @@ from pathlib import Path
 import json
 import shutil
 import subprocess
+from helpers.shell import shell
 
 NPM_PACKAGES_DIR = Path("packaging/npm")
 DIST_DIR = Path("dist")
-
-
-
-def _sh(command: str, cwd: str = None) -> str:
-    """Run a shell command and return output"""
-    process = subprocess.run(
-        command,
-        shell=True,
-        check=True,
-        capture_output=True,
-        text=True,
-        cwd=cwd
-    )
-    if process.returncode != 0:
-        raise subprocess.CalledProcessError(
-            process.returncode, command, process.stderr
-        )
-    return process.stdout
-
 
 npm_binary_mapping = {
     "ticketeer_darwin_amd64_v1/ticketeer": "ticketeer-darwin-x64/ticketeer",
@@ -72,7 +54,7 @@ def pack_npm(target: str) -> str:
         package_dir = package.parent
         print(f"Publishing {package_dir}")
         try:
-            _sh("npm publish", cwd=package_dir)
+            shell("npm publish", cwd=package_dir)
         except subprocess.CalledProcessError as e:
             print(f"Failed to publish {package_dir}")
             print(e.stderr)
