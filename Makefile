@@ -4,16 +4,27 @@ GOLANGCI_LINT_VERSION = v1.62.2
 REVIVE_VERSION = v1.5.1
 GIT_CHGLOG_VERSION = v0.15.4
 
-GO_BIN_PATH := $(shell go env GOPATH)/bin
+GO_BIN_DIR := $(shell go env GOPATH)/bin
 TEST_MODULES := $(shell go list ./... | grep -v -e /cmd/)
+COVERAGE_DIR := $(shell pwd)/coverage
 
 .PHONY: build
 build:
-	go build -o build/ticketeer .
+	go build -ldflags "-s -w" -o ticketeer
+
+.PHONY: build-coverage
+build-coverage:
+	go build -cover -ldflags "-s -w" -o ticketeer
 
 .PHONY: install
-install:
-	go install
+install: build
+	rm -f $(GO_BIN_DIR)/ticketeer
+	cp ticketeer "$(GO_BIN_DIR)/"
+
+.PHONY: install-coverage
+install-coverage: build-coverage
+	rm -f $(GO_BIN_DIR)/ticketeer
+	cp ticketeer "$(GO_BIN_DIR)/"
 
 .PHONY: clean
 clean:
@@ -25,7 +36,7 @@ clean:
 .PHONY: release
 release: clean
 	@goreleaser release --snapshot
-	python3 packaging/publish.py $(VERSION)
+	python3 scripts/publish.py $(VERSION)
 	git tag v$(VERSION)
 	make changelog
 	git tag -d v$(VERSION)
@@ -48,11 +59,31 @@ test-e2e: install
 		-tags=e2e \
 		e2e_test.go
 
+.PHONY: coverage
+coverage: install-coverage
+	@rm -rf "$(COVERAGE_DIR)"
+	@mkdir "$(COVERAGE_DIR)"
+	@mkdir "$(COVERAGE_DIR)/e2e"
+	@go test -coverprofile=coverage/unit.cover.out $(TEST_MODULES)
+	@GOCOVERDIR="$(COVERAGE_DIR)/e2e" \
+		go test \
+			-race -count=1 -timeout=30s \
+			-tags=e2e \
+			e2e_test.go
+	@go tool covdata percent -i=coverage/e2e -o=coverage/e2e.cover.out
+	@python3 \
+		scripts/combine_coverage.py \
+		--output "$(COVERAGE_DIR)/cover.out" \
+		"$(COVERAGE_DIR)/e2e.cover.out" \
+		"$(COVERAGE_DIR)/unit.cover.out"
+	@go tool cover -html coverage/cover.out -o coverage/cover.html 
+	
+
 .PHONY: setup
 setup:
 	curl -sSfL \
 		https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh \
-		| sh -s -- -b $(GO_BIN_PATH) $(GOLANGCI_LINT_VERSION)
+		| sh -s -- -b $(GO_BIN_DIR) $(GOLANGCI_LINT_VERSION)
 	go install github.com/mgechev/revive@$(REVIVE_VERSION)
 	go install github.com/git-chglog/git-chglog/cmd/git-chglog@$(GIT_CHGLOG_VERSION)
 
@@ -64,12 +95,6 @@ run:
 lint:
 	golangci-lint run ./...
 	revive -config ./revive.toml  ./...
-
-.PHONY: coverage
-coverage:
-	@mkdir -p coverage
-	@go test -coverprofile=coverage/cover.out $(TEST_MODULES)
-	@go tool cover -html coverage/cover.out -o coverage/cover.html
 
 .PHONY: report-coverage
 report-coverage:
