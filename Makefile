@@ -17,14 +17,12 @@ build-coverage:
 	go build -cover -ldflags "-s -w" -o ticketeer
 
 .PHONY: install
-install: build
-	rm -f $(GO_BIN_DIR)/ticketeer
-	cp ticketeer "$(GO_BIN_DIR)/"
+install:
+	go install
 
 .PHONY: install-coverage
-install-coverage: build-coverage
-	rm -f $(GO_BIN_DIR)/ticketeer
-	cp ticketeer "$(GO_BIN_DIR)/"
+install-coverage:
+	go install -cover
 
 .PHONY: clean
 clean:
@@ -70,7 +68,7 @@ coverage: install-coverage
 			-race -count=1 -timeout=30s \
 			-tags=e2e \
 			e2e_test.go
-	@go tool covdata percent -i=coverage/e2e -o=coverage/e2e.cover.out
+	go tool covdata percent -i="$(COVERAGE_DIR)/e2e" -o=coverage/e2e.cover.out
 	@python3 \
 		scripts/combine_coverage.py \
 		--output "$(COVERAGE_DIR)/cover.out" \
