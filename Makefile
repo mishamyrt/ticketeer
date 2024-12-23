@@ -69,13 +69,14 @@ coverage: install-coverage
 			-tags=e2e \
 			e2e_test.go
 	@go tool covdata percent -i="$(COVERAGE_DIR)/e2e" -o=coverage/e2e.cover.out
-	@python3 \
-		scripts/combine_coverage.py \
+	@python3 scripts/combine_coverage.py \
 		--output "$(COVERAGE_DIR)/cover.out" \
 		"$(COVERAGE_DIR)/e2e.cover.out" \
 		"$(COVERAGE_DIR)/unit.cover.out"
+
+.PHONY: covreport
+covreport: coverage
 	@covreport -i coverage/cover.out -o coverage/cover.html
-	
 
 .PHONY: setup
 setup:
