@@ -1,4 +1,4 @@
-VERSION = 0.1.3
+VERSION = 0.1.4
 
 GOLANGCI_LINT_VERSION = v1.62.2
 REVIVE_VERSION = v1.5.1
@@ -29,6 +29,7 @@ clean:
 	rm -rf build
 	rm -rf dist
 	rm -f packaging/npm/ticketeer-*/ticketeer
+	rm -f packaging/npm/ticketeer-*/ticketeer.exe
 	git restore packaging/npm
 
 .PHONY: release
