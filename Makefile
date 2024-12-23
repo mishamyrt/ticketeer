@@ -68,13 +68,13 @@ coverage: install-coverage
 			-race -count=1 -timeout=30s \
 			-tags=e2e \
 			e2e_test.go
-	go tool covdata percent -i="$(COVERAGE_DIR)/e2e" -o=coverage/e2e.cover.out
+	@go tool covdata percent -i="$(COVERAGE_DIR)/e2e" -o=coverage/e2e.cover.out
 	@python3 \
 		scripts/combine_coverage.py \
 		--output "$(COVERAGE_DIR)/cover.out" \
 		"$(COVERAGE_DIR)/e2e.cover.out" \
 		"$(COVERAGE_DIR)/unit.cover.out"
-	@go tool cover -html coverage/cover.out -o coverage/cover.html 
+	@covreport -i coverage/cover.out -o coverage/cover.html
 	
 
 .PHONY: setup
@@ -84,6 +84,7 @@ setup:
 		| sh -s -- -b $(GO_BIN_DIR) $(GOLANGCI_LINT_VERSION)
 	go install github.com/mgechev/revive@$(REVIVE_VERSION)
 	go install github.com/git-chglog/git-chglog/cmd/git-chglog@$(GIT_CHGLOG_VERSION)
+	go install github.com/cancue/covreport@latest
 
 .PHONY: run
 run:
