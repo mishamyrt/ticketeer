@@ -35,7 +35,6 @@ clean:
 release: clean
 	@goreleaser release --snapshot
 	python3 scripts/publish.py $(VERSION)
-	git tag v$(VERSION)
 	make changelog
 	git tag -d v$(VERSION)
 	git add packaging/npm

@@ -8,3 +8,4 @@ testrepo
 packaging/npm/ticketeer-*/ticketeer
 packaging/npm/ticketeer-*/ticketeer.exe
 /ticketeer
+__pycache__
