@@ -1,7 +1,8 @@
 package cmd
 
 import (
-	"github.com/mishamyrt/ticketeer/internal/config"
+	"os"
+
 	"github.com/mishamyrt/ticketeer/internal/ticketeer"
 	"github.com/spf13/cobra"
 )
@@ -16,7 +17,8 @@ func (apply) New(app *ticketeer.App) *cobra.Command {
 		Short:   "Append ticket id to commit message",
 		Example: "ticketeer apply",
 		RunE: func(_ *cobra.Command, _ []string) error {
-			return app.Apply(&applyArgs)
+			cwd, _ := os.Getwd()
+			return app.Apply(cwd, &applyArgs)
 		},
 	}
 
@@ -26,7 +28,7 @@ func (apply) New(app *ticketeer.App) *cobra.Command {
 	)
 
 	applyCmd.Flags().StringVarP(
-		&applyArgs.ConfigPath, "config", "c", config.DefaultPath,
+		&applyArgs.ConfigPath, "config", "c", "",
 		"path to configuration file",
 	)
 

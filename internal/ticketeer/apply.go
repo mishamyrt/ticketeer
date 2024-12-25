@@ -3,6 +3,7 @@ package ticketeer
 import (
 	"errors"
 	"fmt"
+	"path/filepath"
 	"regexp"
 	"strings"
 
@@ -20,15 +21,13 @@ type ApplyArgs struct {
 }
 
 // Apply appends ticket id to commit message
-func (a *App) Apply(args *ApplyArgs) error {
-	cfg, err := config.FromYAMLFile(args.ConfigPath)
-	if err != nil &&
-		(!errors.Is(err, config.ErrFileNotFound) ||
-			args.ConfigPath != config.DefaultPath) {
+func (a *App) Apply(workingDir string, args *ApplyArgs) error {
+	cfg, err := a.resolveConfig(workingDir, args.ConfigPath)
+	if err != nil {
 		return err
 	}
 
-	repo, err := git.OpenRepository(".")
+	repo, err := git.OpenRepository(workingDir)
 	if err != nil {
 		return err
 	}
@@ -86,6 +85,27 @@ func (a *App) Apply(args *ApplyArgs) error {
 	}
 
 	return repo.SetCommitMessage(message)
+}
+
+func (a *App) resolveConfig(workingDir, path string) (*config.Config, error) {
+	var configPath string
+	if path == "" {
+		configPath = filepath.Join(workingDir, config.DefaultFileName)
+	} else if filepath.IsAbs(path) {
+		configPath = path
+	} else {
+		configPath = filepath.Join(workingDir, path)
+	}
+
+	cfg, err := config.FromYAMLFile(configPath)
+	if err != nil {
+		return nil, err
+	}
+	if errors.Is(err, config.ErrFileNotFound) && path == "" {
+		return &config.Default, nil
+	}
+
+	return cfg, nil
 }
 
 func (a *App) handleEmptyTicket(err error, allowEmpty bool) error {

@@ -15,8 +15,8 @@ import (
 const readmeURL = "https://github.com/mishamyrt/ticketeer?tab=readme-ov-file"
 
 // Install git hook
-func (a *App) Install(force bool) error {
-	repo, err := git.OpenRepository("./")
+func (a *App) Install(workingDir string, force bool) error {
+	repo, err := git.OpenRepository(workingDir)
 	if err != nil {
 		return err
 	}

@@ -32,32 +32,34 @@ type YAMLConfig struct {
 }
 
 // ParseYAML parses yaml configuration
-func ParseYAML(raw YAMLConfig) (config Config, err error) {
+func ParseYAML(raw YAMLConfig) (*Config, error) {
+	var err error
+	config := Default
 	config.Ticket, err = ParseYAMLTicket(raw.Ticket)
 	if err != nil {
-		return
+		return nil, err
 	}
 	config.Branch, err = ParseYAMLBranch(raw.Branch)
 	if err != nil {
-		return
+		return nil, err
 	}
 	config.Message, err = ParseYAMLMessage(raw.Message)
-	return
+	return &config, err
 }
 
 // FromYAMLFile reads and parses yaml configuration
-func FromYAMLFile(path string) (Config, error) {
+func FromYAMLFile(path string) (*Config, error) {
 	content, err := os.ReadFile(path)
 	if err != nil {
 		if os.IsNotExist(err) {
 			err = fmt.Errorf("%w at %s", ErrFileNotFound, path)
 		}
-		return defaultConfig, err
+		return nil, err
 	}
 	var raw YAMLConfig
 	err = yaml.Unmarshal(content, &raw)
 	if err != nil {
-		return Config{}, err
+		return nil, err
 	}
 
 	return ParseYAML(raw)
@@ -71,7 +73,7 @@ type YAMLTicketConfig struct {
 
 // ParseYAMLTicket parses ticket configuration
 func ParseYAMLTicket(raw YAMLTicketConfig) (TicketConfig, error) {
-	config := defaultConfig.Ticket
+	config := Default.Ticket
 	var err error
 	if raw.Format != nil {
 		config.Format, err = ParseTicketFormat(*raw.Format)
@@ -87,7 +89,7 @@ func ParseYAMLTicket(raw YAMLTicketConfig) (TicketConfig, error) {
 
 // ParseYAMLBranch parses branch configuration
 func ParseYAMLBranch(raw YAMLBranchConfig) (BranchConfig, error) {
-	config := defaultConfig.Branch
+	config := Default.Branch
 	if raw.Format != nil {
 		format, err := ParseBranchFormat(*raw.Format)
 		if err != nil {
@@ -103,7 +105,7 @@ func ParseYAMLBranch(raw YAMLBranchConfig) (BranchConfig, error) {
 
 // ParseYAMLMessage parses message configuration
 func ParseYAMLMessage(raw YAMLMessageConfig) (MessageConfig, error) {
-	config := defaultConfig.Message
+	config := Default.Message
 	var err error
 	if raw.Location != nil {
 		config.Location, err = ParseTicketLocation(*raw.Location)
