@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"os"
+	"strings"
 
 	"github.com/mishamyrt/ticketeer/pkg/tpl"
 	"gopkg.in/yaml.v3"
@@ -114,7 +115,8 @@ func ParseYAMLMessage(raw YAMLMessageConfig) (MessageConfig, error) {
 		}
 	}
 	if raw.Template != nil {
-		config.Template = tpl.Template(*raw.Template)
+		tplValue := strings.TrimSpace(*raw.Template)
+		config.Template = tpl.Template(tplValue)
 	} else {
 		config.Template = defaultTemplates[config.Location]
 	}
