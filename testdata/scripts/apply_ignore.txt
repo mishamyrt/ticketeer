@@ -1,4 +1,6 @@
 exec git init
+exec git config user.email "i@mail.com"
+exec git config user.name "name"
 exec ticketeer install
 exec git switch -c main
 exec git add foo.sh
