@@ -69,7 +69,7 @@ func FromYAMLFile(path string) (*Config, error) {
 // YAMLTicketConfig represents ticket configuration
 type YAMLTicketConfig struct {
 	Format     *string `yaml:"format"`
-	AllowEmpty *bool   `yaml:"allow_empty"`
+	AllowEmpty *bool   `yaml:"allow-empty"`
 }
 
 // ParseYAMLTicket parses ticket configuration
