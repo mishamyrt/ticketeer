@@ -74,8 +74,8 @@ coverage: install-coverage
 		"$(COVERAGE_DIR)/e2e.cover.out" \
 		"$(COVERAGE_DIR)/unit.cover.out"
 
-.PHONY: covreport
-covreport: coverage
+.PHONY: coverage-html
+coverage-html: coverage
 	@covreport -i coverage/cover.out -o coverage/cover.html
 
 .PHONY: setup
