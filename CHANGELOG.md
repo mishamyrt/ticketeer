@@ -6,6 +6,26 @@ The format is based on [Keep a Changelog][],
 and this project adheres to [Semantic Versioning][].
 
 
+## [v0.1.5](https://github.com/mishamyrt/ticketeer/releases/tag/v0.1.5) - 2024-12-26
+### Bug Fixes
+- correctly load `allow-empty`
+
+### Features
+- clean up install output
+- trim template bounding spaces
+- add description of available options in case of config errors
+
+### Refactoring
+- avoid global log usage
+- move pattern matcher to pkg
+- improve path handling
+
+### Testing
+- initialize git user before action
+- add more e2e cases
+- add force install e2e
+
+
 ## [v0.1.4](https://github.com/mishamyrt/ticketeer/releases/tag/v0.1.4) - 2024-12-23
 ### Bug Fixes
 - assert execution pwd before run
@@ -78,7 +98,8 @@ and this project adheres to [Semantic Versioning][].
 
 [keep a changelog]: https://keepachangelog.com/en/1.0.0/
 [semantic versioning]: https://semver.org/spec/v2.0.0.html
-[Unreleased]: https://github.com/mishamyrt/ticketeer/compare/v0.1.4...HEAD
+[Unreleased]: https://github.com/mishamyrt/ticketeer/compare/v0.1.5...HEAD
+[v0.1.5]: https://github.com/mishamyrt/ticketeer/compare/v0.1.4...v0.1.5
 [v0.1.4]: https://github.com/mishamyrt/ticketeer/compare/v0.1.3...v0.1.4
 [v0.1.3]: https://github.com/mishamyrt/ticketeer/compare/v0.1.2...v0.1.3
 [v0.1.2]: https://github.com/mishamyrt/ticketeer/compare/v0.1.1...v0.1.2
