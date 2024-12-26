@@ -49,7 +49,7 @@ func (a *App) Install(workingDir string, force bool) error {
 		a.log.Info(color.Yellow("Detected unknown hook."))
 		a.log.Info("To replace the hook, run:")
 		a.log.Info(color.Cyan("  ticketeer install --force"))
-		return nil
+		return wrapHandledError(err)
 	}
 
 	if runner.GuideAnchor == "" {
@@ -65,7 +65,7 @@ func (a *App) Install(workingDir string, force bool) error {
 	a.log.Info("To replace the hook, run:")
 	a.log.Info(color.Cyan("  ticketeer install --force"))
 
-	return nil
+	return wrapHandledError(err)
 }
 
 func (a *App) installHook(hookPath string) error {
