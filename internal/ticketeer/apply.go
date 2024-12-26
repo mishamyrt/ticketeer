@@ -2,12 +2,14 @@ package ticketeer
 
 import (
 	"errors"
+	"fmt"
 	"path/filepath"
 
 	"github.com/mishamyrt/ticketeer/internal/config"
 	"github.com/mishamyrt/ticketeer/internal/git"
 	"github.com/mishamyrt/ticketeer/internal/ticket"
 	"github.com/mishamyrt/ticketeer/internal/ticketeer/format"
+	"github.com/mishamyrt/ticketeer/pkg/log/color"
 	"github.com/mishamyrt/ticketeer/pkg/pattern"
 )
 
@@ -94,14 +96,38 @@ func (a *App) resolveConfig(workingDir, path string) (*config.Config, error) {
 	}
 
 	cfg, err := config.FromYAMLFile(configPath)
-	if err != nil {
-		return nil, err
+	if err == nil {
+		return cfg, nil
 	}
+
+	if errors.Is(err, config.ErrUnknownLocation) {
+		a.log.Info(color.Red("Unknown ticket location"))
+		a.log.Info("Available options:")
+		for _, v := range config.TicketLocation("").Options() {
+			a.log.Info(fmt.Sprintf("- %s", v))
+		}
+	}
+
+	if errors.Is(err, config.ErrUnknownBranchFormat) {
+		a.log.Info(color.Red("Unknown branch format"))
+		a.log.Info("Available options:")
+		for _, v := range config.BranchFormat("").Options() {
+			a.log.Info(fmt.Sprintf("- %s", v))
+		}
+	}
+
+	if errors.Is(err, config.ErrUnknownTicketFormat) {
+		a.log.Info(color.Red("Unknown ticket format"))
+		a.log.Info("Available options:")
+		for _, v := range ticket.IDFormat("").Options() {
+			a.log.Info(fmt.Sprintf("- %s", v))
+		}
+	}
+
 	if errors.Is(err, config.ErrFileNotFound) && path == "" {
 		return &config.Default, nil
 	}
-
-	return cfg, nil
+	return nil, err
 }
 
 func (a *App) handleEmptyTicket(err error, allowEmpty bool) error {

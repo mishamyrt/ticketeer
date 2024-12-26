@@ -26,6 +26,13 @@ const (
 	TicketLocationBody TicketLocation = "body"
 )
 
+func (ticket TicketLocation) Options() []TicketLocation {
+	return []TicketLocation{
+		TicketLocationTitle,
+		TicketLocationBody,
+	}
+}
+
 // ParseTicketLocation parses ticket location from string
 func ParseTicketLocation(location string) (TicketLocation, error) {
 	switch TicketLocation(location) {
