@@ -1,0 +1,12 @@
+exec git init
+exec ticketeer install
+exec git switch -c feature/PRJ-123
+exec git add foo.sh
+exec git commit -m 'chore: add script'
+exec git log -1
+stdout 'chore: add script\n'
+stdout 'PRJ-123'
+
+-- foo.sh --
+#!/bin/sh
+echo "Hello, world!"

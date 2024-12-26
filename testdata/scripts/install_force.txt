@@ -1,6 +1,6 @@
 exec git init
 exec cp hook.sh .git/hooks/prepare-commit-msg
-exec ticketeer install
+! exec ticketeer install
 stdout 'unknown hook'
 exec ticketeer install --force
 stdout 'successfully installed'

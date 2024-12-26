@@ -1,0 +1,10 @@
+exec git init
+exec ticketeer install
+exec git switch -c main
+exec git add foo.sh
+exec git commit -m 'chore: add foo script'
+stderr 'skipping'
+
+-- foo.sh --
+#!/bin/sh
+echo "Hello, world!"

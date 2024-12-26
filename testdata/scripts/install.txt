@@ -1,4 +1,0 @@
-exec git init
-exec ticketeer install
-exists .git/hooks/prepare-commit-msg
-! stderr .

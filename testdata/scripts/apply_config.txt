@@ -1,0 +1,23 @@
+exec git init
+exec ticketeer install
+exec git switch -c 'wrong-branch-name'
+exec git add foo.sh
+! exec git commit -m 'chore: add foo script'
+exec git switch -c '#42'
+exec git commit -m 'chore: add foo script'
+exec git log -1
+stdout '#42: chore: add foo script'
+
+-- .ticketeer.yaml --
+message:
+  location: title
+  template: "#{ticket}:"
+ticket:
+  format: numeric
+  allow-empty: false
+branch:
+  format: ticket-id
+
+-- foo.sh --
+#!/bin/sh
+echo "Hello, world!"
