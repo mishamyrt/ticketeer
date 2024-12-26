@@ -26,6 +26,7 @@ const (
 	TicketLocationBody TicketLocation = "body"
 )
 
+// Options returns available ticket locations
 func (ticket TicketLocation) Options() []TicketLocation {
 	return []TicketLocation{
 		TicketLocationTitle,

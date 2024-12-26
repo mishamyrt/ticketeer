@@ -29,6 +29,7 @@ const (
 	NumericFormat IDFormat = "^#?([0-9]+)$"
 )
 
+// Options returns available ticket formats
 func (i IDFormat) Options() []IDFormat {
 	return []IDFormat{
 		AlphanumericFormat,
