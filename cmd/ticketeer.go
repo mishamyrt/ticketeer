@@ -1,9 +1,10 @@
 package cmd
 
 import (
+	"fmt"
+
 	"github.com/mishamyrt/ticketeer/internal/git"
-	"github.com/mishamyrt/ticketeer/pkg/log"
-	"github.com/mishamyrt/ticketeer/pkg/log/color"
+	"github.com/mishamyrt/ticketeer/internal/ticketeer"
 )
 
 // Ticketeer is a command line utility to add ticket id to commit message
@@ -11,16 +12,18 @@ func Ticketeer() int {
 	rootCmd := newRootCmd()
 
 	if !git.IsAvailable() {
-		message := color.Yellow(
-			"Warning: git is not available in PATH.\n" +
-				"Ticketeer may not work correctly.\n\n")
-		log.Info(message)
-	}
-
-	if err := rootCmd.Execute(); err != nil {
-		log.Errorf("Error: %v", err)
+		m := "git is not available in PATH.\n" +
+			"ticketeer can't work without it.\n"
+		fmt.Println(m)
 		return 1
 	}
 
-	return 0
+	err := rootCmd.Execute()
+	if err == nil {
+		return 0
+	}
+	if !ticketeer.IsHandledError(err) {
+		fmt.Printf("Unexpected error: %v\n", err)
+	}
+	return 1
 }

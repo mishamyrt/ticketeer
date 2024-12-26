@@ -16,7 +16,8 @@ var commands = [...]command{
 }
 
 func newRootCmd() *cobra.Command {
-	var options ticketeer.Options
+	var logOpts ticketeer.LogOptions
+
 	app := ticketeer.New()
 
 	rootCmd := &cobra.Command{
@@ -28,18 +29,18 @@ func newRootCmd() *cobra.Command {
 				ticketeer install
 		`),
 		PersistentPreRun: func(_ *cobra.Command, _ []string) {
-			app.Setup(&options)
+			app.SetupLog(logOpts)
 		},
 		SilenceUsage:  true,
 		SilenceErrors: true,
 	}
 
 	rootCmd.PersistentFlags().BoolVarP(
-		&options.Verbose, "verbose", "v", false, "verbose output",
+		&logOpts.Verbose, "verbose", "v", false, "verbose output",
 	)
 
 	rootCmd.PersistentFlags().BoolVar(
-		&options.NoColor, "no-color", false, "disable color output",
+		&logOpts.NoColor, "no-color", false, "disable color output",
 	)
 
 	for _, command := range commands {

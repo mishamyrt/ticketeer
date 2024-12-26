@@ -1,7 +1,6 @@
 package log_test
 
 import (
-	"io"
 	"strings"
 	"testing"
 
@@ -95,37 +94,7 @@ func Suite(t *testing.T, logger log.Logger) {
 	}
 }
 
-type stdLoggerWrapper struct{}
-
-var _ log.Logger = stdLoggerWrapper{}
-
-func (stdLoggerWrapper) SetOutput(w io.Writer) {
-	log.SetOutput(w)
-}
-func (stdLoggerWrapper) SetLevel(level log.Level) {
-	log.SetLevel(level)
-}
-func (stdLoggerWrapper) Debug(v ...any) {
-	log.Debug(v...)
-}
-func (stdLoggerWrapper) Debugf(format string, a ...any) {
-	log.Debugf(format, a...)
-}
-func (stdLoggerWrapper) Info(v ...any) {
-	log.Info(v...)
-}
-func (stdLoggerWrapper) Infof(format string, a ...any) {
-	log.Infof(format, a...)
-}
-func (stdLoggerWrapper) Error(v ...any) {
-	log.Error(v...)
-}
-func (stdLoggerWrapper) Errorf(format string, a ...any) {
-	log.Errorf(format, a...)
-}
-
 func TestPureLogger(t *testing.T) {
 	t.Parallel()
 	Suite(t, log.NewPure())
-	Suite(t, &stdLoggerWrapper{})
 }

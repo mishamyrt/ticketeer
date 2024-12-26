@@ -5,26 +5,37 @@ import (
 	"github.com/mishamyrt/ticketeer/pkg/log/color"
 )
 
-// App represent ticketeer application
-type App struct{}
-
-// Options represent command line options
-type Options struct {
+// LogOptions represent application log options
+type LogOptions struct {
 	Verbose bool
 	NoColor bool
 }
 
-// New creates new ticketeer application
-func New() *App {
-	return &App{}
+// App represent ticketeer application
+type App struct {
+	log log.Logger
 }
 
-// Setup configures application
-func (a *App) Setup(opts *Options) {
+// New creates new ticketeer application
+func New() *App {
+	return &App{
+		log: log.New(),
+	}
+}
+
+// SetupLog configures logger
+func (a *App) SetupLog(opts LogOptions) {
+	var level log.Level
 	if opts.Verbose {
-		log.SetLevel(log.LevelDebug)
+		level = log.LevelDebug
+	} else {
+		level = log.LevelInfo
 	}
-	if opts.NoColor {
-		color.SetNoColor(true)
-	}
+	a.log.SetLevel(level)
+	color.SetNoColor(opts.NoColor)
+}
+
+func (a *App) handleError(err error, message string) error {
+	a.log.Errorf("%s: %v", message, err)
+	return wrapHandledError(err)
 }

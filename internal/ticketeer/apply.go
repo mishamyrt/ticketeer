@@ -8,7 +8,6 @@ import (
 	"github.com/mishamyrt/ticketeer/internal/git"
 	"github.com/mishamyrt/ticketeer/internal/ticket"
 	"github.com/mishamyrt/ticketeer/internal/ticketeer/format"
-	"github.com/mishamyrt/ticketeer/pkg/log"
 	"github.com/mishamyrt/ticketeer/pkg/pattern"
 )
 
@@ -22,25 +21,26 @@ type ApplyArgs struct {
 func (a *App) Apply(workingDir string, args *ApplyArgs) error {
 	cfg, err := a.resolveConfig(workingDir, args.ConfigPath)
 	if err != nil {
-		return err
+		return a.handleError(err, "Failed to resolve config")
 	}
 
 	repo, err := git.OpenRepository(workingDir)
 	if err != nil {
-		return err
+		return a.handleError(err, "Failed to open repository")
 	}
-	log.Debugf("Repository root found at: %s", repo.Path())
+	a.log.Debugf("Repository root found at: %s", repo.Path())
 
 	branchName, err := repo.BranchName()
 	if err != nil {
-		log.Info("Branch is not found, skipping")
+		a.log.Info("Branch is not found, skipping")
+		a.log.Debugf("Error: %v", err)
 		return nil
 	}
-	log.Debugf("Branch name: %s", branchName)
+	a.log.Debugf("Branch name: %s", branchName)
 
 	ignores := pattern.NewList(cfg.Branch.Ignore...)
 	if ignores.Match(branchName) {
-		log.Info("Branch is ignored, skipping")
+		a.log.Info("Branch is ignored, skipping")
 		return nil
 	}
 
@@ -51,33 +51,36 @@ func (a *App) Apply(workingDir string, args *ApplyArgs) error {
 		message, err = repo.CommitMessage()
 	}
 	if err != nil {
-		return err
+		return a.handleError(err, "Failed to parse commit message")
 	}
 
 	rawID, err := ticket.FindInBranch(branchName, cfg.Branch.Format)
 	if err != nil {
 		return a.handleEmptyTicket(err, cfg.Ticket.AllowEmpty)
 	}
-
 	id, err := ticket.ParseID(rawID, cfg.Ticket.Format)
 	if err != nil {
 		return a.handleEmptyTicket(err, cfg.Ticket.AllowEmpty)
 	}
-
-	log.Debugf("Ticket ID found in branch name: %s", rawID)
+	a.log.Debugf("Ticket ID found in branch name: %s", rawID)
 
 	err = format.Message(&message, id, cfg.Message)
 	if err != nil {
-		return err
+		return a.handleError(err, "Failed to format commit message")
 	}
 
 	if args.DryRunWith != "" {
-		log.Info("Running in dry-run mode")
+		a.log.Info("Running in dry-run mode")
 		print(message.String())
 		return nil
 	}
 
-	return repo.SetCommitMessage(message)
+	err = repo.SetCommitMessage(message)
+	if err != nil {
+		return a.handleError(err, "Failed to update commit message")
+	}
+
+	return nil
 }
 
 func (a *App) resolveConfig(workingDir, path string) (*config.Config, error) {
@@ -103,8 +106,8 @@ func (a *App) resolveConfig(workingDir, path string) (*config.Config, error) {
 
 func (a *App) handleEmptyTicket(err error, allowEmpty bool) error {
 	if !allowEmpty {
-		return err
+		return a.handleError(err, "Ticket ID is not found in branch name")
 	}
-	log.Info("Ticket ID is not found in branch name, skipping")
+	a.log.Info("Ticket ID is not found in branch name, skipping")
 	return nil
 }
