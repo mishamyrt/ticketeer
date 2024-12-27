@@ -56,9 +56,11 @@ release: clean
 	python3 scripts/publish.py $(VERSION)
 	make changelog
 	git tag -d v$(VERSION)
-	git add packaging/npm
-	git add Makefile
-	git add CHANGELOG.md
+	git add \
+		packaging/npm \
+		packaging/pypi \
+		Makefile \
+		CHANGELOG.md
 	git commit -m "chore: release $(VERSION)"
 	git tag -a v$(VERSION) -m "release $(VERSION)"
 	@git push && git push --tags
