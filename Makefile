@@ -4,6 +4,10 @@ GOLANGCI_LINT_VERSION = v1.62.2
 REVIVE_VERSION = v1.5.1
 GIT_CHGLOG_VERSION = v0.15.4
 
+VENV_PATH = ./venv
+PYTHON = python3
+VENV = . "$(VENV_PATH)/bin/activate";
+
 GO_BIN_DIR := $(shell go env GOPATH)/bin
 TEST_MODULES := $(shell go list ./... | grep -v -e /cmd/)
 COVERAGE_DIR := $(shell pwd)/coverage
@@ -11,6 +15,10 @@ COVERAGE_DIR := $(shell pwd)/coverage
 .PHONY: build
 build:
 	go build -ldflags "-s -w" -o ticketeer
+
+.PHONY: build-release
+build-release:
+	@goreleaser release --snapshot --clean
 
 .PHONY: build-coverage
 build-coverage:
@@ -28,13 +36,22 @@ install-coverage:
 clean:
 	rm -rf build
 	rm -rf dist
-	rm -f packaging/npm/ticketeer-*/ticketeer
-	rm -f packaging/npm/ticketeer-*/ticketeer.exe
+	rm -f packaging/npm/ticketeer-*/ticketeer \
+		packaging/npm/ticketeer-*/ticketeer.exe
+	rm -rf \
+		packaging/pypi/**/*.egg-info \
+		packaging/pypi/**/build \
+		packaging/pypi/**/dist
+	rm -f \
+		packaging/pypi/ticketeer_*/ticketeer_*/ticketeer_* \
+		packaging/pypi/ticketeer_*/ticketeer_*/ticketeer_*.exe \
+		packaging/pypi/**/.version \
+		packaging/pypi/**/README.md
 	git restore packaging/npm
 
 .PHONY: release
 release: clean
-	@goreleaser release --snapshot
+	make build-release
 	python3 scripts/publish.py $(VERSION)
 	make changelog
 	git tag -d v$(VERSION)
@@ -86,6 +103,9 @@ setup:
 	go install github.com/mgechev/revive@$(REVIVE_VERSION)
 	go install github.com/git-chglog/git-chglog/cmd/git-chglog@$(GIT_CHGLOG_VERSION)
 	go install github.com/cancue/covreport@latest
+	rm -rf "$(VENV_PATH)"
+	python3 -m venv "$(VENV_PATH)"
+	$(VENV) pip install -r requirements.txt
 
 .PHONY: run
 run:
