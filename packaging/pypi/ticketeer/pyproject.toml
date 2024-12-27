@@ -20,11 +20,11 @@ classifiers = [
     "Programming Language :: Python :: 3.13",
 ]
 dependencies = [
-    "ticketeer_windows==0.1.3; sys_platform == 'win32'",
-    "ticketeer_openbsd==0.1.3; sys_platform == 'openbsd'",
-    "ticketeer_freebsd==0.1.3; sys_platform == 'freebsd'",
-    "ticketeer_darwin==0.1.3; sys_platform == 'darwin'",
-    "ticketeer_linux==0.1.3; sys_platform == 'linux'",
+    "ticketeer_windows==0.1.5; sys_platform == 'win32'",
+    "ticketeer_openbsd==0.1.5; sys_platform == 'openbsd'",
+    "ticketeer_freebsd==0.1.5; sys_platform == 'freebsd'",
+    "ticketeer_darwin==0.1.5; sys_platform == 'darwin'",
+    "ticketeer_linux==0.1.5; sys_platform == 'linux'",
 ]
 scripts = { "ticketeer"="ticketeer.__main__:main" }
 
