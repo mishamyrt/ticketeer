@@ -34,6 +34,12 @@ npm install --save-dev ticketeer
 yarn add --dev ticketeer
 ```
 
+### pip
+
+```bash
+pip install ticketeer
+```
+
 ## Usage
 
 ### Standalone
