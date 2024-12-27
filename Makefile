@@ -48,6 +48,7 @@ clean:
 		packaging/pypi/**/.version \
 		packaging/pypi/**/README.md
 	git restore packaging/npm
+	git restore packaging/pypi
 
 .PHONY: release
 release: clean
