@@ -1,11 +1,29 @@
+# IDE
 .vscode
-build/
-coverage/
-dist/
+
+# System
 .DS_Store
+
+# Project artifacts
+/dist/
+/coverage/
+/ticketeer
+
+# Node artifacts
 node_modules
-testrepo
+
+# Python artifacts
+venv
+__pycache__
+*.egg-info
+
+# npm
 packaging/npm/ticketeer-*/ticketeer
 packaging/npm/ticketeer-*/ticketeer.exe
-/ticketeer
-__pycache__
+
+# PyPi
+packaging/pypi/*/.version
+packaging/pypi/*/README.md
+packaging/pypi/ticketeer_*/ticketeer_*/ticketeer_*
+packaging/pypi/**/build/
+packaging/pypi/**/dist/
