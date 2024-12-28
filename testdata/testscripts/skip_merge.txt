@@ -1,0 +1,27 @@
+exec git init
+exec git config user.email "i@mail.com"
+exec git config user.name "name"
+exec git switch -c main
+exec git add -A
+exec git commit -m 'initial commit'
+exec ticketeer install
+
+exec git switch -c feature/XXX-123
+exec touch foo.sh
+exec git add -A
+exec git commit -m 'add foo'
+stdout 'XXX-123: add foo'
+
+exec git switch main
+exec touch bar.sh
+exec git add -A
+exec git commit -m 'add bar'
+
+exec git merge feature/XXX-123
+
+exec git log -1
+! stdout 'XXX-123: '
+
+-- .ticketeer.yaml --
+message:
+  location: title

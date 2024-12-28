@@ -1,0 +1,23 @@
+exec git init
+exec git config user.email "i@mail.com"
+exec git config user.name "name"
+exec ticketeer install
+exec git switch -c main
+exec git add -A
+exec git commit -m 'initial commit'
+stderr 'skipping'
+
+exec git switch -c release/XXX-123
+exec touch bar.sh
+exec git add -A
+exec git commit -m 'chore: add foo script'
+exec git log -1
+stdout 'chore: add foo script'
+! stdout 'XXX-123: chore: add foo script'
+
+-- .ticketeer.yaml --
+message:
+  location: title
+branch:
+  ignore:
+    - release/*
