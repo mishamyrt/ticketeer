@@ -1,0 +1,7 @@
+exec ticketeer version
+stdout \d+\.\d+\.\d+
+! stderr .
+
+exec ticketeer version -f
+stdout \d+\.\d+\.\d+\s\(.*\)
+! stderr .

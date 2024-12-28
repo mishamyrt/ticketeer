@@ -13,6 +13,7 @@ type command interface {
 var commands = [...]command{
 	apply{},
 	install{},
+	version{},
 }
 
 func newRootCmd() *cobra.Command {

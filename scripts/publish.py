@@ -108,7 +108,6 @@ class NPMPackaging(TicketeerPackaging):
             shell("npm publish", cwd=package)
         if node_token is not None:
             os.environ["NODE_AUTH_TOKEN"] = node_token
-        
 
     def __str__(self):
         packages = self._packages.copy()
@@ -127,6 +126,8 @@ class NPMPackaging(TicketeerPackaging):
 
 class GitPackaging(TicketeerPackaging):
     """Git ticketeer packaging"""
+    _version_file = Path("internal/ticketeer/version.go")
+    _version_re = r'const version = \"(.*)\"'
 
     @property
     def name(self) -> str:
@@ -137,6 +138,11 @@ class GitPackaging(TicketeerPackaging):
 
     def set_version(self, version):
         shell(f"git tag v{version}")
+        with self._version_file.open("r", encoding="utf-8") as file:
+            content = file.read()
+        content = re.sub(self._version_re, f'const version = "{version}"', content)
+        with self._version_file.open("w", encoding="utf-8") as file:
+            file.write(content)
 
     def copy_binaries(self, _: Path):
         pass

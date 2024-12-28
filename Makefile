@@ -11,10 +11,13 @@ VENV = . "$(VENV_PATH)/bin/activate";
 GO_BIN_DIR := $(shell go env GOPATH)/bin
 TEST_MODULES := $(shell go list ./... | grep -v -e /cmd/)
 COVERAGE_DIR := $(shell pwd)/coverage
+COMMIT_HASH = $(shell git rev-parse HEAD)
+GC = go build -ldflags "-s -w \
+	-X github.com/mishamyrt/ticketeer/internal/ticketeer.commitHash=$(COMMIT_HASH)"
 
 .PHONY: build
 build:
-	go build -ldflags "-s -w" -o ticketeer
+	$(GC) -o ticketeer
 
 .PHONY: build-release
 build-release:
@@ -22,7 +25,7 @@ build-release:
 
 .PHONY: build-coverage
 build-coverage:
-	go build -cover -ldflags "-s -w" -o ticketeer
+	$(GC) -cover -o ticketeer
 
 .PHONY: install
 install:
@@ -129,7 +132,7 @@ report-coverage:
 check:
 	@make lint
 	@make test
-	@make build
+	@make test-e2e
 
 .PHONY: changelog
 changelog:
