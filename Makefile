@@ -62,6 +62,7 @@ release: clean
 	git add \
 		packaging/npm \
 		packaging/pypi \
+		internal/ticketeer/version.go \
 		Makefile \
 		CHANGELOG.md
 	git commit -m "chore: release $(VERSION)"
