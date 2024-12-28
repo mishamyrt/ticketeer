@@ -1,0 +1,14 @@
+! exec ticketeer uninstall
+exec git init
+exec ticketeer install
+exec ticketeer uninstall
+! exec ticketeer uninstall
+exec cp hook.sh .git/hooks/prepare-commit-msg
+! exec ticketeer uninstall
+stdout 'Detected'
+exec ticketeer uninstall --force
+stdout 'uninstalled'
+
+-- hook.sh --
+#!/bin/sh
+# unknown hook

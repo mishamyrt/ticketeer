@@ -1,3 +1,4 @@
+! exec ticketeer install
 exec git init
 exec git config user.email "i@mail.com"
 exec git config user.name "name"
