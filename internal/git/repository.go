@@ -60,15 +60,19 @@ func (r *Repository) SetCommitMessage(m CommitMessage) error {
 	return os.WriteFile(msgPath, content, 0644)
 }
 
-// NewRepository returns a new Repository instance
-func NewRepository(root string) *Repository {
-	return &Repository{rootDir: root}
-}
-
 // FindRoot returns root of git repository
 func FindRoot(path string) (string, error) {
 	cmd := Command("rev-parse", "--show-toplevel")
 	return cmd.ExecuteAt(path)
+}
+
+// NewRepository creates and returns a new Repository instance
+func NewRepository(root string) (*Repository, error) {
+	_, err := Command("init").ExecuteAt(root)
+	if err != nil {
+		return nil, err
+	}
+	return OpenRepository(root)
 }
 
 // OpenRepository returns a new Repository instance with root of git repository.
@@ -83,7 +87,7 @@ func OpenRepository(path string) (*Repository, error) {
 	}
 	return &Repository{
 		rootDir:           rootDir,
-		hooksDir:          hooksDir,
+		hooksDir:          filepath.Join(rootDir, hooksDir),
 		commitMessagePath: filepath.Join(rootDir, ".git", "COMMIT_EDITMSG"),
 	}, nil
 }

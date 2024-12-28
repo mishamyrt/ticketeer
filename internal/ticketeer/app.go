@@ -1,6 +1,8 @@
 package ticketeer
 
 import (
+	"io"
+
 	"github.com/mishamyrt/ticketeer/pkg/log"
 	"github.com/mishamyrt/ticketeer/pkg/log/color"
 )
@@ -9,6 +11,7 @@ import (
 type LogOptions struct {
 	Verbose bool
 	NoColor bool
+	Output  io.Writer
 }
 
 // App represent ticketeer application
@@ -33,6 +36,9 @@ func (a *App) SetupLog(opts LogOptions) {
 	}
 	a.log.SetLevel(level)
 	color.SetNoColor(opts.NoColor)
+	if opts.Output != nil {
+		a.log.SetOutput(opts.Output)
+	}
 }
 
 func (a *App) handleError(err error, message string) error {

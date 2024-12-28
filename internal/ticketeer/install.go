@@ -11,6 +11,8 @@ import (
 	"github.com/mishamyrt/ticketeer/pkg/log/color"
 )
 
+var ErrAlreadyInstalled = errors.New("hook already installed")
+
 const readmeURL = "https://github.com/mishamyrt/ticketeer?tab=readme-ov-file"
 
 // Install git hook
@@ -51,7 +53,7 @@ func (a *App) Install(workingDir string, force bool) error {
 
 	if runner.GuideAnchor == "" {
 		a.log.Info("Hook already installed")
-		return nil
+		return wrapHandledError(ErrAlreadyInstalled)
 	}
 
 	a.log.Infof(color.Yellow(
