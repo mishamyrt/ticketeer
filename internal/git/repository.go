@@ -26,6 +26,11 @@ func (r *Repository) HooksDir() string {
 	return r.hooksDir
 }
 
+// Exec executes git command
+func (r *Repository) Exec(cmd *Cmd) (string, error) {
+	return cmd.ExecuteAt(r.rootDir)
+}
+
 // BranchName returns current branch name.
 // If repository is in detached state, returns error
 func (r *Repository) BranchName() (string, error) {

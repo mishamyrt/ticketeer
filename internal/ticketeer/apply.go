@@ -73,7 +73,7 @@ func (a *App) Apply(workingDir string, args *ApplyArgs) error {
 
 	if args.DryRunWith != "" {
 		a.log.Info("Running in dry-run mode")
-		print(message.String())
+		a.log.Info(message.String())
 		return nil
 	}
 

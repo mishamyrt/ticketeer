@@ -11,6 +11,7 @@ import (
 	"github.com/mishamyrt/ticketeer/pkg/log/color"
 )
 
+// ErrAlreadyInstalled is returned when hook is already installed
 var ErrAlreadyInstalled = errors.New("hook already installed")
 
 const readmeURL = "https://github.com/mishamyrt/ticketeer?tab=readme-ov-file"
