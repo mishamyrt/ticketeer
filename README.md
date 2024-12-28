@@ -2,11 +2,39 @@
 
 <img src="./docs/logo.svg" align="right" width="100" />
 
+The Ticketeer is designed to streamline your development workflow by automatically appending the ticket number to your commit messages. This ensures that every commit is linked to a specific issue or task, making it easier to track changes and maintain a clear history.
+
 Utility to insert task ticket id into commit message.
 
 - **Simple**. Does not need to be configured;
 - **Environment agnostic**. Works with any platform that can run git;
 - **Fast**. Won't slow down your commit process as actions are performed instantly.
+
+## How It Works
+
+When you make a commit in a branch containing the ticket number (e.g., `feature/XXX-123`), ticketeer automatically detects the ticket number (`XXX-123`) and modifies the commit message.
+
+If you commit with the message `commit text` and the branch name is `feature/XXX-123`, the resulting commit message will be:
+
+```
+commit text
+
+XXX-123
+```
+
+By default, ticketeer ticket id is appended to the body of the commit message. In my humble opinion, it makes the story more definitive. But if you think otherwise and want the task number in the header prefix — use the configuration file:
+
+```yaml
+# .ticketeer.yaml
+message:
+  location: title
+```
+
+With this configuration, the resulting commit message will be:
+
+```
+XXX-123: commit text
+```
 
 ## Installation
 
