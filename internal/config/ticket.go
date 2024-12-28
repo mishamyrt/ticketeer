@@ -26,12 +26,10 @@ const (
 	TicketLocationBody TicketLocation = "body"
 )
 
-// Options returns available ticket locations
-func (ticket TicketLocation) Options() []TicketLocation {
-	return []TicketLocation{
-		TicketLocationTitle,
-		TicketLocationBody,
-	}
+// TicketLocationOptions represents available ticket locations
+var TicketLocationOptions = [...]TicketLocation{
+	TicketLocationTitle,
+	TicketLocationBody,
 }
 
 // ParseTicketLocation parses ticket location from string

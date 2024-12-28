@@ -103,7 +103,7 @@ func (a *App) resolveConfig(workingDir, path string) (*config.Config, error) {
 	if errors.Is(err, config.ErrUnknownLocation) {
 		a.log.Info(color.Red("Unknown ticket location"))
 		a.log.Info("Available options:")
-		for _, v := range config.TicketLocation("").Options() {
+		for _, v := range config.TicketLocationOptions {
 			a.log.Info(fmt.Sprintf("- %s", v))
 		}
 	}
@@ -111,7 +111,7 @@ func (a *App) resolveConfig(workingDir, path string) (*config.Config, error) {
 	if errors.Is(err, config.ErrUnknownBranchFormat) {
 		a.log.Info(color.Red("Unknown branch format"))
 		a.log.Info("Available options:")
-		for _, v := range config.BranchFormat("").Options() {
+		for _, v := range config.BranchFormatOptions {
 			a.log.Info(fmt.Sprintf("- %s", v))
 		}
 	}
@@ -119,7 +119,7 @@ func (a *App) resolveConfig(workingDir, path string) (*config.Config, error) {
 	if errors.Is(err, config.ErrUnknownTicketFormat) {
 		a.log.Info(color.Red("Unknown ticket format"))
 		a.log.Info("Available options:")
-		for _, v := range ticket.IDFormat("").Options() {
+		for _, v := range ticket.IDFormatOptions {
 			a.log.Info(fmt.Sprintf("- %s", v))
 		}
 	}

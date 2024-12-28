@@ -29,14 +29,12 @@ const (
 	NumericFormat IDFormat = "^#?([0-9]+)$"
 )
 
-// Options returns available ticket formats
-func (i IDFormat) Options() []IDFormat {
-	return []IDFormat{
-		AlphanumericFormat,
-		AlphanumericSmallFormat,
-		AlphanumericCapsFormat,
-		NumericFormat,
-	}
+// IDFormatOptions available ticket formats
+var IDFormatOptions = [...]IDFormat{
+	AlphanumericFormat,
+	AlphanumericSmallFormat,
+	AlphanumericCapsFormat,
+	NumericFormat,
 }
 
 // String returns string representation of ticket id

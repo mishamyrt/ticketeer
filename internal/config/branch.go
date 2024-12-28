@@ -22,13 +22,11 @@ const (
 	TicketIDBranch BranchFormat = "ticket-id"
 )
 
-// Options returns available branch formats
-func (b BranchFormat) Options() []BranchFormat {
-	return []BranchFormat{
-		GitFlowBranch,
-		GitFlowTypelessBranch,
-		TicketIDBranch,
-	}
+// BranchFormatOptions available branch formats
+var BranchFormatOptions = [...]BranchFormat{
+	GitFlowBranch,
+	GitFlowTypelessBranch,
+	TicketIDBranch,
 }
 
 // String returns string representation of branch format
