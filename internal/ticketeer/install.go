@@ -20,12 +20,9 @@ func (a *App) Install(workingDir string, force bool) error {
 		return a.handleError(err, "Failed to open repository")
 	}
 	a.log.Debugf("Repository root found at: %s", repo.Path())
-	hookPath, err := getHookPath(repo)
-	if err != nil {
-		return a.handleError(err, "Failed to get hook path")
-	}
 
 	// Install hook if it does not exist
+	hookPath := filepath.Join(repo.HooksDir(), hook.Name)
 	_, err = os.Stat(hookPath)
 	if err != nil {
 		if os.IsNotExist(err) {
@@ -79,12 +76,4 @@ func (a *App) installHook(hookPath string) error {
 	}
 	a.log.Info(color.Green("Hook successfully installed"))
 	return nil
-}
-
-func getHookPath(repo *git.Repository) (string, error) {
-	hooksDir, err := repo.HooksDir()
-	if err != nil {
-		return "", err
-	}
-	return filepath.Join(hooksDir, hook.Name), nil
 }
