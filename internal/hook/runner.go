@@ -6,6 +6,8 @@ import (
 	"strings"
 )
 
+const runnerSizeLimit = 1024 * 1024 // 1MB
+
 var (
 	// ErrUnknownRunner is returned when hook runner is unknown
 	ErrUnknownRunner = errors.New("unable to detect git hook runner from file content")
@@ -58,7 +60,7 @@ func DetectRunner(path string) (*Runner, error) {
 		}
 		return nil, err
 	}
-	if info.Size() > 1024*1024 { // 1MB limit
+	if info.Size() > runnerSizeLimit { // 1MB limit
 		return nil, ErrUnknownRunner
 	}
 	content, err := os.ReadFile(path)
